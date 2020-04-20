@@ -93,7 +93,7 @@ const StatsSubText = styled.Text`
     text-transform:uppercase;
     text-align:center;
 `
-const FlexLogout = styled.TouchableHighlight `
+const FlexLogout = styled.TouchableHighlight`
     align-items:center;
     background-color:#041938;
     padding:15px;
@@ -107,23 +107,98 @@ class Profile extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            image: null,
-            uid: firebase.auth().currentUser.uid
+            image:     null,
+            userUid:   firebase.auth().currentUser.uid,
+            toDo:      [],
+            doing:     [],
+            concluded: []
+            
         }
 
         this.back = this.back.bind(this)
         this.getImage = this.getImage.bind(this)
+        this.saveImage = this.saveImage.bind(this)
 
-
-        // let uid = firebase.auth().currentUser.uid
-        let storage = firebase.storage().ref().child('userAvatar/' + this.state.uid + '.jpg')
+        // Toda vez que entrar na tela de perfil, esse código busca a foto do usuário
+        let storage = firebase.storage().ref().child('userAvatar/' + this.state.userUid + '.jpg')
 
         storage.getDownloadURL().then((url) => {
             let state = this.state
             state.image = { uri: url }
             this.setState(state)
         })
+
+
+        //Código para trazer quantas tarefas "A fazer"
+        Sistema.addAuthListener((user) => {
+            if(user) {
+                let user = this.state.userUid
+
+                firebase.database().ref('tasks')
+                .child(user)
+                .orderByChild('task_status')
+                .equalTo('A fazer')
+                .on('value', (snapshot) => {
+                    let state = this.state
+                    state.toDo = []
+                    
+                    snapshot.forEach((childItem) => {
+                        state.toDo.push({
+                            task_status:childItem.val(),
+                        })
+                    })
+                    this.setState(state)
+                })
+            }
+        })
+        
+        //Código para trazer quantas tarefas "Fazendo"
+        Sistema.addAuthListener((user) => {
+            if(user) {
+                let user = this.state.userUid
+                
+                firebase.database().ref('tasks')
+                .child(user)
+                .orderByChild('task_status')
+                .equalTo('Fazendo')
+                .on('value', (snapshot) => {
+                    let state = this.state
+                    state.doing = []
+                    
+                    snapshot.forEach((childItem) => {
+                        state.doing.push({
+                            task_status:childItem.val(),
+                        })
+                    })
+                    this.setState(state)
+                })
+            }
+        })
+        //Código para trazer quantas tarefas "Concluído"
+        Sistema.addAuthListener((user) => {
+            if(user) {
+                let user = this.state.userUid
+                
+                firebase.database().ref('tasks')
+                .child(user)
+                .orderByChild('task_status')
+                .equalTo('Concluído')
+                .on('value', (snapshot) => {
+                    let state = this.state
+                    state.concluded = []
+                    
+                    snapshot.forEach((childItem) => {
+                        state.concluded.push({
+                            task_status:childItem.val(),
+                        })
+                    })
+                    this.setState(state)
+                })
+            }
+        })
     }
+
+
 
     getImage() {
         let options = { title: 'Selecione uma imagem' }
@@ -132,9 +207,36 @@ class Profile extends Component {
                 let state = this.state;
                 state.image = { uri: r.uri };
                 this.setState(state);
-                alert('Imagem selecionada com sucesso')
+                this.saveImage()
             }
         });
+    }
+
+    saveImage() {
+
+        let uri = this.state.image.uri.replace('file://', '')
+        let uid = this.state.userUid
+        let photo = firebase.storage().ref().child('userAvatar').child(uid + '.jpg')
+        let mime = 'image/jpeg'
+
+        RNFetchBlob.fs.readFile(uri, 'base64')
+            .then((data) => {
+                return RNFetchBlob.polyfill.Blob.build(data, { type: mime + ';BASE64' })
+            })
+            .then((blob) => {
+                photo.put(blob, { contentType: mime })
+                    .on('state_changed', (snapshot) => {
+                        let pct = Math.floor((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
+                        let state = this.state
+                        state.pct = pct
+                        this.setState(state)
+                    }, (error) => {
+                        alert(error.code)
+                    }, () => {
+
+                        alert('Imagem carregada com sucesso!')
+                    })
+            })
     }
 
     back() {
@@ -170,20 +272,20 @@ class Profile extends Component {
 
                     <StatsContainer>
                         <StatsBox>
-                            <StatsTitle>483</StatsTitle>
+                            <StatsTitle>{this.state.toDo.length}</StatsTitle>
                             <StatsSubText>A fazer</StatsSubText>
                         </StatsBox>
                         <StatsBox style={{ borderColor: "#c7c7c7", borderLeftWidth: 1, borderRightWidth: 1 }}>
-                            <StatsTitle>483</StatsTitle>
+                            <StatsTitle>{this.state.doing.length}</StatsTitle>
                             <StatsSubText>Fazendo</StatsSubText>
                         </StatsBox>
                         <StatsBox>
-                            <StatsTitle>483</StatsTitle>
+                            <StatsTitle>{this.state.concluded.length}</StatsTitle>
                             <StatsSubText>Concluídas</StatsSubText>
                         </StatsBox>
                     </StatsContainer>
                 </Scroll>
-                
+
                 <FlexLogout onPress={this.logout} underlayColor="#031126">
                     <FlexTextBtn>Logout</FlexTextBtn>
                 </FlexLogout>

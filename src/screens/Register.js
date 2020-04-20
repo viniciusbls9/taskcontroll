@@ -141,7 +141,6 @@ class Register extends Component {
                         alert('Imagem carregada com sucesso!')
                     })
             })
-
     }
 
     register() {
