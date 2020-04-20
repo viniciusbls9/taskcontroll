@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Alert } from 'react-native'
 import styled from 'styled-components/native'
 import Sistema from '../Sistema'
 import firebase from '../FirebaseConnection'
@@ -75,6 +76,9 @@ const NameUser = styled.Text`
     font-weight:200;
     font-size:23px;
 `
+const Message = styled.Text `
+    font-size:12px;
+`
 const StatsContainer = styled.View`
     flex-direction:row;
     align-self:center;
@@ -125,7 +129,8 @@ class Profile extends Component {
             toDo: [],
             doing: [],
             concluded: [],
-            userName: ''
+            userName: '',
+            message: ''
 
         }
 
@@ -173,6 +178,7 @@ class Profile extends Component {
         this.back = this.back.bind(this)
         this.getImage = this.getImage.bind(this)
         this.saveImage = this.saveImage.bind(this)
+        this.logout = this.logout.bind(this)
 
         // Toda vez que entrar na tela de perfil, esse código busca a foto do usuário
         let storage = firebase.storage().ref().child('userAvatar/' + this.state.userUid + '.jpg')
@@ -286,8 +292,10 @@ class Profile extends Component {
                     }, (error) => {
                         alert(error.code)
                     }, () => {
-
-                        alert('Imagem carregada com sucesso!')
+                        this.setState({ message: 'Imagem alterada com sucesso!' })
+                        setInterval(() => {
+                            this.setState({ message: '' })
+                        }, 3000)
                     })
             })
     }
@@ -297,7 +305,22 @@ class Profile extends Component {
     }
 
     logout() {
-        Sistema.logout()
+        Alert.alert(
+            'Não vá embora ):',
+            'Deseja realmente sair do app?',
+            [
+                {
+                    text: 'Sim',
+                    onPress: () => Sistema.logout(),
+                    style: 'cancel'
+                },
+                {
+                    text: 'Não',
+                    onPress: () => { }
+                },
+            ],
+            { cancelable: false },
+        );
     }
 
     render() {
@@ -321,6 +344,7 @@ class Profile extends Component {
 
                     <InfoContainer>
                         <NameUser>{this.state.userName}</NameUser>
+                        <Message>{this.state.message}</Message>
                     </InfoContainer>
 
                     <StatsContainer>

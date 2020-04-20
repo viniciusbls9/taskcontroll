@@ -97,7 +97,8 @@ class Login extends Component {
                 AsyncStorage.setItem("@password", this.state.password)
 
                 this.props.navigation.navigate('ToDo')
-
+            } else if(this.state.email == '' && this.state.password == '') {
+                this.setState({ errorMessage: 'Preencha campo de e-mail e senha!' })
             }
         })
         Sistema.login(this.state.email, this.state.password)
@@ -105,10 +106,10 @@ class Login extends Component {
                 switch (error.code) {
                     case 'auth/wrong-password':
                         this.setState({ errorMessage: 'Ops, senha inválida!' })
-                        break;
+                    break;
                     case 'auth/user-not-found':
                         this.setState({ errorMessage: 'Ops, usuário inválido!' })
-                        break;
+                    break;
                 }
             }))
     }

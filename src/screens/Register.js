@@ -136,9 +136,6 @@ class Register extends Component {
                         this.setState(state)
                     }, (error) => {
                         alert(error.code)
-                    }, () => {
-
-                        alert('Imagem carregada com sucesso!')
                     })
             })
     }

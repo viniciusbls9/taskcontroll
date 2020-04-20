@@ -15,6 +15,16 @@ const FlexIcon = styled.Image`
     width:20px;
     height:20px;
 `
+const TitleBar = styled.TouchableHighlight`
+    flex-direction:row;
+    justify-content:space-between;
+    margin-top:14px;
+    margin-bottom:30px;
+`
+const Icon = styled.Image`
+    width:20px;
+    height:20px;
+`
 const Tasks = styled.FlatList`
 
 `
@@ -44,7 +54,7 @@ class ToDo extends Component {
         }
 
         this.addTask = this.addTask.bind(this)
-
+        
         Sistema.addAuthListener((user) => {
             if(user) {
                 let state = this.state
