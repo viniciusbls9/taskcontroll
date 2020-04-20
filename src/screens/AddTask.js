@@ -15,6 +15,16 @@ const KeyboardArea = styled.KeyboardAvoidingView`
 const Scroll = styled.ScrollView`
 
 `
+const TitleBar = styled.TouchableHighlight`
+    flex-direction:row;
+    justify-content:space-between;
+    margin-top:14px;
+    margin-bottom:30px;
+`
+const Icon = styled.Image`
+    width:20px;
+    height:20px;
+`
 
 // const FlexLogo = styled.Image`
 //     width:200px;
@@ -85,7 +95,10 @@ class AddTask extends Component {
                 { name: 'Aplicativo' }
             ]
         }
+        
+
         this.insertTask = this.insertTask.bind(this)
+        this.back = this.back.bind(this)
     }
 
     insertTask() {
@@ -142,6 +155,10 @@ class AddTask extends Component {
         }
     }
 
+    back() {
+        this.props.navigation.goBack()
+    }
+
 
     render() {
         let clientsItems = this.state.clients.map((v, k) => {
@@ -155,6 +172,9 @@ class AddTask extends Component {
             <Page>
                 <Scroll>
                     <KeyboardArea behavior="padding" keyboardVerticalOffset={80}>
+                        <TitleBar onPress={this.back} underlayColor="transparent">
+                            <Icon source={require('../uploads/arrow.png')} />
+                        </TitleBar>
                         {/* <FlexLogo source={require('../uploads/logotipo-azul-min.png')} resizeMode="contain" /> */}
                         <FlexTitle>Adicione uma nova Tarefa</FlexTitle>
                         <FlexLabel>Descrição</FlexLabel>

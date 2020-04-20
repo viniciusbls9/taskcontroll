@@ -291,9 +291,9 @@ export default class TaskList extends Component {
                 state.task_pause_register = snapshot.val()
             })
 
-            
-            
-            
+
+
+
             /* INFORMAÇÕES DA DATA DE CADASTRO DA TAREFA */
             let date = new Date()
             let day = date.getDate()
@@ -302,14 +302,14 @@ export default class TaskList extends Component {
             let hours = date.getHours()
             let min = date.getMinutes()
             let sec = date.getSeconds()
-            
+
             day = day < 10 ? '0' + day : day
             month = (month + 1) < 10 ? '0' + (month + 1) : (month + 1)
             min = min < 10 ? '0' + min : min
-            
+
             let dateFormated = day + '/' + month + '/' + year
             let hoursFormated = (hours + 1) + ':' + min + ':' + sec
-            
+
             let state = this.state
             state.task_concluded_register = dateFormated + ' ' + hoursFormated
 
@@ -332,17 +332,17 @@ export default class TaskList extends Component {
 
     deleteTask() {
         Alert.alert(
-            this.props.data.client +' - '+ this.props.data.service,
+            this.props.data.client + ' - ' + this.props.data.service,
             'Deseja excluir está tarefa?',
             [
-                { 
-                    text: 'Sim', 
+                {
+                    text: 'Sim',
                     onPress: () => firebase.database().ref('tasks').child(this.state.auth).child(this.props.data.key).remove(),
-                    style:'cancel'
+                    style: 'cancel'
                 },
                 {
                     text: 'Cancel',
-                    onPress: () => {}
+                    onPress: () => { }
                 },
             ],
             { cancelable: false },
@@ -357,16 +357,14 @@ export default class TaskList extends Component {
                     <TaskTitle>{this.props.data.client + ' - ' + this.props.data.service}</TaskTitle>
                     <TaskDescription numberOfLines={2} >{this.props.data.task_desc}</TaskDescription>
                     {this.props.data.task_status == 'A fazer' &&
-                        <>
-                            <BodyFlex>
-                                <BodyFlexStatus bgStatus="#ff8c00">
-                                    <FlexStatus>{this.props.data.task_status}</FlexStatus>
-                                </BodyFlexStatus>
-                                <BodyFlexRegister bgRegister="#c4c4c4">
-                                    <FlexRegister>Criado: {this.props.data.task_register}</FlexRegister>
-                                </BodyFlexRegister>
-                            </BodyFlex>
-                        </>
+                        <BodyFlex>
+                            <BodyFlexStatus bgStatus="#ff8c00">
+                                <FlexStatus>{this.props.data.task_status}</FlexStatus>
+                            </BodyFlexStatus>
+                            <BodyFlexRegister bgRegister="#c4c4c4">
+                                <FlexRegister>Criado: {this.props.data.task_register}</FlexRegister>
+                            </BodyFlexRegister>
+                        </BodyFlex>
                     }
                     {this.props.data.task_status == 'Fazendo' &&
                         <>
@@ -413,7 +411,8 @@ export default class TaskList extends Component {
 
                     }
                 </TaskInfo>
-                {this.props.data.task_status == 'A fazer' &&
+                {
+                    this.props.data.task_status == 'A fazer' &&
                     <FlexTaskBtn>
                         <FlexBtn flex={5} underlayColor="#EBEBEB" onPress={this.doingTask}>
                             <FlexIconBtn source={require('../uploads/play.png')} />
@@ -426,7 +425,8 @@ export default class TaskList extends Component {
                         </FlexBtn>
                     </FlexTaskBtn>
                 }
-                {this.props.data.task_status == 'Fazendo' &&
+                {
+                    this.props.data.task_status == 'Fazendo' &&
                     <FlexTaskBtn>
                         <FlexBtn flex={5} underlayColor="#EBEBEB" onPress={this.pauseTask}>
                             <FlexIconBtn source={require('../uploads/pause.png')} />
@@ -442,7 +442,8 @@ export default class TaskList extends Component {
                         </FlexBtn>
                     </FlexTaskBtn>
                 }
-                {this.props.data.task_status == 'Pausado' &&
+                {
+                    this.props.data.task_status == 'Pausado' &&
                     <FlexTaskBtn>
                         <FlexBtn flex={5} underlayColor="#EBEBEB" onPress={this.continueTask}>
                             <FlexIconBtn source={require('../uploads/refresh.png')} />
@@ -458,7 +459,8 @@ export default class TaskList extends Component {
                         </FlexBtn>
                     </FlexTaskBtn>
                 }
-                {this.props.data.task_status == 'Concluído' &&
+                {
+                    this.props.data.task_status == 'Concluído' &&
                     <FlexTaskBtn>
                         <FlexBtn flex={1} underlayColor="#EBEBEB">
                             <FlexIconBtn source={require('../uploads/pencil.png')} />
@@ -468,7 +470,7 @@ export default class TaskList extends Component {
                         </FlexBtn>
                     </FlexTaskBtn>
                 }
-            </Task>
+            </Task >
         )
     }
 }

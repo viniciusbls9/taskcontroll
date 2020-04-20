@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components/native'
 import Sistema from '../Sistema'
 import firebase from '../FirebaseConnection'
+import TaskLimit from '../components/TaskLimit'
 import ImagePicker from 'react-native-image-picker'
 import RNFetchBlob from 'rn-fetch-blob'
 
@@ -78,6 +79,7 @@ const StatsContainer = styled.View`
     flex-direction:row;
     align-self:center;
     margin-top:32px;
+    margin-bottom:32px;
 `
 const StatsBox = styled.View`
     align-items:center;
@@ -93,10 +95,19 @@ const StatsSubText = styled.Text`
     text-transform:uppercase;
     text-align:center;
 `
+const LastTaskTitle = styled.Text`
+    padding-left:8px;
+    font-size:16px;
+
+`
+const Tasks = styled.FlatList`
+    margin-bottom:50px;
+`
 const FlexLogout = styled.TouchableHighlight`
     align-items:center;
     background-color:#041938;
     padding:15px;
+    margin:0 8px 0 10px;
     border-radius:5px;
 `
 const FlexTextBtn = styled.Text`
@@ -107,13 +118,57 @@ class Profile extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            image:     null,
-            userUid:   firebase.auth().currentUser.uid,
-            toDo:      [],
-            doing:     [],
-            concluded: []
-            
+            image: null,
+            userUid: firebase.auth().currentUser.uid,
+            lista: [],
+            listLimit: [],
+            toDo: [],
+            doing: [],
+            concluded: [],
+            userName: ''
+
         }
+
+        //Traz o nome do usuário logado
+        Sistema.addAuthListener((user) => {
+            if(user) {
+                let user = this.state.userUid
+                firebase.database().ref('task_users').child(user).child('name').on('value', (snapshot) => {
+                    let state = this.state
+                    state.userName = snapshot.val()
+                    this.setState(state)
+                })
+            }
+        })
+
+        // Traz a ultima tarefa cadastrada pelo usuário
+        Sistema.addAuthListener((user) => {
+            if (user) {
+                let user = this.state.userUid
+
+                firebase.database().ref('tasks')
+                    .child(user)
+                    .orderByChild('task_status')
+                    .equalTo('A fazer')
+                    .limitToLast(1)
+                    .on('value', (snapshot) => {
+                        let state = this.state
+                        state.listLimit = []
+
+                        snapshot.forEach((childItem) => {
+                            state.listLimit.push({
+                                task_desc: childItem.val().task_desc,
+                                client: childItem.val().client,
+                                service: childItem.val().service,
+                                task_status: childItem.val().task_status,
+                                task_register: childItem.val().task_register,
+                                key: childItem.key
+                            })
+                        })
+                        this.setState(state)
+                    })
+            }
+        })
 
         this.back = this.back.bind(this)
         this.getImage = this.getImage.bind(this)
@@ -128,77 +183,75 @@ class Profile extends Component {
             this.setState(state)
         })
 
-
         //Código para trazer quantas tarefas "A fazer"
         Sistema.addAuthListener((user) => {
-            if(user) {
+            if (user) {
                 let user = this.state.userUid
 
                 firebase.database().ref('tasks')
-                .child(user)
-                .orderByChild('task_status')
-                .equalTo('A fazer')
-                .on('value', (snapshot) => {
-                    let state = this.state
-                    state.toDo = []
-                    
-                    snapshot.forEach((childItem) => {
-                        state.toDo.push({
-                            task_status:childItem.val(),
+                    .child(user)
+                    .orderByChild('task_status')
+                    .equalTo('A fazer')
+                    .on('value', (snapshot) => {
+                        let state = this.state
+                        state.toDo = []
+
+                        snapshot.forEach((childItem) => {
+                            state.toDo.push({
+                                task_status: childItem.val(),
+                            })
                         })
+                        this.setState(state)
                     })
-                    this.setState(state)
-                })
             }
         })
-        
+
         //Código para trazer quantas tarefas "Fazendo"
         Sistema.addAuthListener((user) => {
-            if(user) {
+            if (user) {
                 let user = this.state.userUid
-                
+
                 firebase.database().ref('tasks')
-                .child(user)
-                .orderByChild('task_status')
-                .equalTo('Fazendo')
-                .on('value', (snapshot) => {
-                    let state = this.state
-                    state.doing = []
-                    
-                    snapshot.forEach((childItem) => {
-                        state.doing.push({
-                            task_status:childItem.val(),
+                    .child(user)
+                    .orderByChild('task_status')
+                    .equalTo('Fazendo')
+                    .on('value', (snapshot) => {
+                        let state = this.state
+                        state.doing = []
+
+                        snapshot.forEach((childItem) => {
+                            state.doing.push({
+                                task_status: childItem.val(),
+                            })
                         })
+                        this.setState(state)
                     })
-                    this.setState(state)
-                })
             }
         })
+
         //Código para trazer quantas tarefas "Concluído"
         Sistema.addAuthListener((user) => {
-            if(user) {
+            if (user) {
                 let user = this.state.userUid
-                
+
                 firebase.database().ref('tasks')
-                .child(user)
-                .orderByChild('task_status')
-                .equalTo('Concluído')
-                .on('value', (snapshot) => {
-                    let state = this.state
-                    state.concluded = []
-                    
-                    snapshot.forEach((childItem) => {
-                        state.concluded.push({
-                            task_status:childItem.val(),
+                    .child(user)
+                    .orderByChild('task_status')
+                    .equalTo('Concluído')
+                    .on('value', (snapshot) => {
+                        let state = this.state
+                        state.concluded = []
+
+                        snapshot.forEach((childItem) => {
+                            state.concluded.push({
+                                task_status: childItem.val(),
+                            })
                         })
+                        this.setState(state)
                     })
-                    this.setState(state)
-                })
             }
         })
     }
-
-
 
     getImage() {
         let options = { title: 'Selecione uma imagem' }
@@ -249,8 +302,8 @@ class Profile extends Component {
 
     render() {
         return (
-            <Page>
-                <Scroll showsVerticalScrollIndicator={false}>
+            <Scroll showsVerticalScrollIndicator={false}>
+                <Page>
                     <TitleBar onPress={this.back} underlayColor="transparent">
                         <Icon source={require('../uploads/arrow.png')} />
                     </TitleBar>
@@ -267,7 +320,7 @@ class Profile extends Component {
                     </ProfileBody>
 
                     <InfoContainer>
-                        <NameUser>Vinicius</NameUser>
+                        <NameUser>{this.state.userName}</NameUser>
                     </InfoContainer>
 
                     <StatsContainer>
@@ -284,12 +337,19 @@ class Profile extends Component {
                             <StatsSubText>Concluídas</StatsSubText>
                         </StatsBox>
                     </StatsContainer>
-                </Scroll>
 
-                <FlexLogout onPress={this.logout} underlayColor="#031126">
-                    <FlexTextBtn>Logout</FlexTextBtn>
-                </FlexLogout>
-            </Page>
+                    <LastTaskTitle>Última tarefa cadastrada</LastTaskTitle>
+                    <Tasks
+                        data={this.state.listLimit}
+                        renderItem={({ item }) => <TaskLimit data={item} />}
+                    />
+
+
+                    <FlexLogout onPress={this.logout} underlayColor="#031126">
+                        <FlexTextBtn>Logout</FlexTextBtn>
+                    </FlexLogout>
+                </Page>
+            </Scroll>
         )
     }
 }
