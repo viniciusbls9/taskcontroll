@@ -9,8 +9,14 @@ const Page = styled.View`
     flex:1;
     padding:10px;
 `
-const Text = styled.Text`
-
+const Message = styled.Text `
+    font-size:15px;
+    text-align:center;
+`
+const MessageClick = styled.Text `
+    font-size:15px;
+    text-align:center;
+    font-weight:bold;
 `
 const FlexIcon = styled.Image`
     width:20px;
@@ -81,6 +87,12 @@ class Doing extends Component {
     render() {
         return (
             <Page>
+                {this.state.lista == '' &&
+                <>
+                    <Message>Nenhuma tarefa cadastrada.</Message>
+                    <MessageClick onPress={this.addTask}>Adicionar uma nova tarefa</MessageClick>
+                </>
+                }
                 <Tasks
                     data={this.state.lista}
                     renderItem={({item}) => <TaskList data={item} />}
