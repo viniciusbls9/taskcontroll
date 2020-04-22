@@ -15,9 +15,8 @@ class Sistema {
     }
     // FUNÇÃO PARA REGISTRAR NOVO USUÁRIO NO APLICATIVO
     registerConfirme(email, senha) {
-        firebase.auth().createUserWithEmailAndPassword(email, senha).catch((error) => {
-            alert(error.code)
-        })
+        return firebase.auth().createUserWithEmailAndPassword(email, senha)
+
     }
     // FUNÇÃO QUE PEGA INFORMAÇÕES DO USUÁRIO
     getUserInfo(callback) {

@@ -1,30 +1,19 @@
 import React, { Component } from 'react'
+import { ActivityIndicator } from 'react-native'
 import styled from 'styled-components/native'
-import firebase from '../FirebaseConnection'
 import Sistema from '../Sistema'
 
 const Page = styled.View`
     flex:1;
     width:null;
     justify-content:center;
-`
-// const FlexLogo = styled.Image`
-//     width:100%;
-//     height:50px;
-//     margin-bottom:20px;
-//     margin-top:50px;
-// `
-const FlexTitle = styled.Text`
-    font-size:22px;
-    text-align:center;
-    margin-bottom:20px;
-
+    background-color:#fff;
 `
 const FlexDesc = styled.Text`
     font-size:13px;
     text-align:center;
+    color:#8a8f9e;
 `
-
 
 class Preload extends Component {
 
@@ -45,7 +34,7 @@ class Preload extends Component {
         return (
             <Page>
                 {/* <FlexLogo source={require('../uploads/logotipo-azul-min.png')} resizeMode="contain" /> */}
-                <FlexTitle>Bem vindo ao TaskControll</FlexTitle>
+                <ActivityIndicator size="large" color="#5c8efe" style={{marginBottom:20}} />
                 <FlexDesc>Carregando...</FlexDesc>
             </Page>
         )
@@ -54,7 +43,8 @@ class Preload extends Component {
 
 Preload.navigationOptions = () => {
     return {
-        title: 'FlexApp'
+        title: 'FlexApp',
+        headerShown:false
     }
 }
 

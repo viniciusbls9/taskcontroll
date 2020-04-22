@@ -7,6 +7,7 @@ import firebase from '../FirebaseConnection'
 const Page = styled.View`
     flex:1;
     padding:10px;
+    background-color:#f6f4fd;
 `
 const Message = styled.Text `
     font-size:15px;
@@ -93,6 +94,7 @@ class Paused extends Component {
                     </>
                 }
                 <Tasks
+                    showsVerticalScrollIndicator={false}
                     data={this.state.lista}
                     renderItem={({item}) => <TaskList data={item} />}
                 />
@@ -116,8 +118,12 @@ Paused.navigationOptions = () => {
             color: '#ffffff'
         },
         headerLeft: () => null,
-        tabBarIcon: () => {
-            return <FlexIcon source={require('../uploads/pause.png')} />
+        tabBarIcon: ({focused}) => {
+            if(focused) {
+                return <FlexIcon source={require('../uploads/pause-active.png')} />
+            } else {
+                return <FlexIcon source={require('../uploads/pause.png')} />
+            }
         }
     }
 }

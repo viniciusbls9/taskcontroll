@@ -8,22 +8,52 @@ import RNFetchBlob from 'rn-fetch-blob'
 window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest
 window.Blob = RNFetchBlob.polyfill.Blob
 
-const Page = styled.View`
+
+const Scroll = styled.ScrollView`
+    background-color:#fff;
+`
+const FlexBg = styled.ImageBackground`
+    
+`
+const Page = styled.SafeAreaView`
     flex:1;
     padding:20px;
 `
-// const FlexLogo = styled.Image`
-//     width:200px;
-//     height:100px;
-//     align-items:center;
-// `
+const KeyboardArea = styled.KeyboardAvoidingView`
+
+`
 const FlexTitle = styled.Text`
     font-size:22px;
     text-align:center;
-    margin-top:20px;
-    margin-bottom:50px;
+    margin-top:30px;
+    margin-bottom:100px;
+    color:#fff;
 `
-
+const FlexAvatarBody = styled.View`
+    align-items:center;
+`
+const FlexBtnAvatar = styled.TouchableHighlight`
+    width:100px;
+    height:100px;
+    background-color:#eee;
+    border-radius:50px;
+    align-items:center;
+    justify-content:center;
+    padding:15px;
+    margin-top:30px;
+`
+const FlexIcon = styled.Image`
+    width:30px;
+    height:30px;
+`
+const ErrorMessage = styled.View`
+`
+const ErrorText = styled.Text`
+    font-size:14px;
+    margin-bottom:10px;
+    text-align:center;
+    color:#8a8f9e;
+`
 const FlexLabel = styled.Text`
     font-size:10px;
     color:#8a8f9e;
@@ -38,7 +68,7 @@ const FlexAddInput = styled.TextInput`
 `
 const FlexBtnLogin = styled.TouchableHighlight`
     align-items:center;
-    background-color:#041938;
+    background-color:#5c8efe;
     padding:15px;
     border-radius:5px;
 `
@@ -46,33 +76,18 @@ const FlexTextBtn = styled.Text`
     color:#fff;
 `
 const Text = styled.Text`
-    color:#414959;
+    
 `
-const FlexIcon = styled.Image`
-    width:20px;
-    height:20px;
+const FlexRegister = styled.Text`
+    color:#aaa;
 `
-const FlexBtnAvatar = styled.TouchableHighlight`
-    width:50px;
-    height:50px;
-    background-color:#ddd;
-    border-radius:25px;
-    align-items:center;
-    padding:15px;
-    margin-bottom:20px;
-    margin-top:20px;
-`
-
 const FlexBtnRegister = styled.TouchableHighlight`
     align-items:center;
     padding:15px;
 `
 const FlexTextBtnRegister = styled.Text`
-    color:#414959;
+    color:#5c8efe;
     font-weight:bold;
-`
-const KeyboardArea = styled.KeyboardAvoidingView`
-
 `
 
 class Register extends Component {
@@ -83,6 +98,8 @@ class Register extends Component {
             name: '',
             email: '',
             password: '',
+            messageAvatar: '',
+            ErrorMessage: '',
             image: null,
             userUid: 0
         }
@@ -111,6 +128,7 @@ class Register extends Component {
             if (r.uri) {
                 let state = this.state;
                 state.image = { uri: r.uri };
+                state.messageAvatar = 'Imagem escolhida com sucesso!'
                 this.setState(state);
             }
         });
@@ -153,6 +171,19 @@ class Register extends Component {
                 }
             })
             Sistema.registerConfirme(this.state.email, this.state.password)
+                .catch((error => {
+                    switch (error.code) {
+                        case 'auth/email-already-in-use':
+                            this.setState({ errorMessage: 'E-mail já cadastrado no aplicativo' })
+                        break;
+                        case 'auth/invalid-email':
+                            this.setState({ errorMessage: 'É obrigatório inserir um e-mail válido' })
+                        break;
+                        case 'auth/weak-password':
+                            this.setState({ errorMessage: 'Sua senha deve ter ao menos 6 digitos' })
+                        break;
+                    }
+                }))
         }
     }
 
@@ -163,53 +194,69 @@ class Register extends Component {
     render() {
 
         return (
-            <Page>
-                <KeyboardArea behavior={Platform.OS == 'ios' ? 'padding' : null}>
-                    {/* <FlexLogo source={require('../uploads/logotipo-azul-min.png')} resizeMode="contain" /> */}
-                    <FlexTitle>Crie sua conta e comece e monitorar suas tarefas</FlexTitle>
+            <Scroll>
+                <FlexBg source={require('../uploads/background2.jpg')} resizeMode="cover" >
+                    <Page>
+                        <KeyboardArea behavior={Platform.OS == 'ios' ? 'padding' : null}>
 
-                    <FlexLabel>Nome:</FlexLabel>
-                    <FlexAddInput
-                        onChangeText={(name) => this.setState({ name })}
-                    />
+                            <FlexTitle>Crie sua conta no TaskControll e comece a controlar suas tarefas</FlexTitle>
 
-                    <FlexLabel>E-mail:</FlexLabel>
-                    <FlexAddInput
-                        onChangeText={(email) => this.setState({ email })}
-                        keyboardType="email-address"
-                        autoCapitalize="none"
-                    />
+                            <FlexAvatarBody>
+                                <FlexBtnAvatar onPress={this.getImage} underlayColor="#ccc">
+                                    <FlexIcon source={require('../uploads/camera.png')} />
+                                </FlexBtnAvatar>
+                            </FlexAvatarBody>
 
-                    <FlexLabel>Senha:</FlexLabel>
-                    <FlexAddInput
-                        onChangeText={(password) => this.setState({ password })}
-                        secureTextEntry={true}
-                        autoCapitalize="none"
-                    />
+                            <ErrorMessage>
+                                <ErrorText>{this.state.messageAvatar}</ErrorText>
+                            </ErrorMessage>
 
-                    <FlexLabel>Avatar:</FlexLabel>
-                    <FlexBtnAvatar onPress={this.getImage} underlayColor="#ccc">
-                        <FlexIcon source={require('../uploads/camera.png')} />
-                    </FlexBtnAvatar>
+                            <FlexLabel>Nome:</FlexLabel>
+                            <FlexAddInput
+                                onChangeText={(name) => this.setState({ name })}
+                            />
 
-                    <FlexBtnLogin onPress={this.register} underlayColor="#031126">
-                        <FlexTextBtn>Registrar</FlexTextBtn>
-                    </FlexBtnLogin>
+                            <FlexLabel>E-mail:</FlexLabel>
+                            <FlexAddInput
+                                onChangeText={(email) => this.setState({ email })}
+                                keyboardType="email-address"
+                                autoCapitalize="none"
+                            />
 
-                    <FlexBtnRegister underlayColor="transparent">
-                        <Text>
-                            Já tem conta? <FlexTextBtnRegister onPress={this.backLogin}>Faça Login</FlexTextBtnRegister>
-                        </Text>
-                    </FlexBtnRegister>
-                </KeyboardArea>
-            </Page>
+                            <FlexLabel>Senha:</FlexLabel>
+                            <FlexAddInput
+                                onChangeText={(password) => this.setState({ password })}
+                                secureTextEntry={true}
+                                autoCapitalize="none"
+                            />
+
+                            <ErrorMessage>
+                                {this.state.errorMessage &&
+                                    <ErrorText>{this.state.errorMessage}</ErrorText>
+                                }
+                            </ErrorMessage>
+
+                            <FlexBtnLogin onPress={this.register} underlayColor="#031126">
+                                <FlexTextBtn>Criar conta</FlexTextBtn>
+                            </FlexBtnLogin>
+
+                            <FlexBtnRegister underlayColor="transparent">
+                                <Text>
+                                    <FlexRegister>Já tem conta?</FlexRegister><FlexTextBtnRegister onPress={this.backLogin}> Faça Login</FlexTextBtnRegister>
+                                </Text>
+                            </FlexBtnRegister>
+                        </KeyboardArea>
+                    </Page>
+                </FlexBg>
+            </Scroll>
         )
     }
 }
 
 Register.navigationOptions = () => {
     return {
-        title: 'FlexApp'
+        title: 'FlexApp',
+        headerShown: false
     }
 }
 

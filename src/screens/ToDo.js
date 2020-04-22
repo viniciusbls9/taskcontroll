@@ -9,30 +9,25 @@ import firebase from '../FirebaseConnection'
 const Page = styled.View`
     flex:1;
     padding:10px;
-    background-color:#fff;
+    background-color:#f6f4fd;
 `
-const Message = styled.Text `
+const MessageBoby = styled.View`
+    align-items:center;
+    margin-top:50px;
+`
+const Message = styled.Text`
     font-size:15px;
     text-align:center;
-`
-const MessageClick = styled.Text `
-    font-size:15px;
-    text-align:center;
-    font-weight:bold;
+    color:#aaa;
+    margin-bottom:20px;
 `
 const FlexIcon = styled.Image`
     width:20px;
     height:20px;
 `
-const TitleBar = styled.TouchableHighlight`
-    flex-direction:row;
-    justify-content:space-between;
-    margin-top:14px;
-    margin-bottom:30px;
-`
 const Icon = styled.Image`
-    width:20px;
-    height:20px;
+    width:60px;
+    height:60px;
 `
 const Tasks = styled.FlatList`
 
@@ -57,13 +52,14 @@ class ToDo extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            uid:'',
-            lista:[],
-            message:'Nenhuma tarefa cadastrada'
+            uid: '',
+            lista: [],
+            message: 'Nenhuma tarefa cadastrada'
         }
 
         this.addTask = this.addTask.bind(this)
-        
+            
+
         Sistema.addAuthListener((user) => {
             if(user) {
                 let state = this.state
@@ -76,7 +72,7 @@ class ToDo extends Component {
                 .on('value', (snapshot) => {
                     let state = this.state
                     state.lista = []
-                    
+
                     snapshot.forEach((childItem) => {
 
                         state.lista.push({
@@ -99,18 +95,25 @@ class ToDo extends Component {
         this.props.navigation.navigate('AddTask')
     }
 
+    
     render() {
         return (
             <Page>
-                 {this.state.lista == '' &&
-                <>
-                    <Message>Nenhuma tarefa cadastrada.</Message>
-                    <MessageClick onPress={this.addTask}>Adicionar uma nova tarefa</MessageClick>
-                </>
+                {this.state.lista == '' &&
+                    <>
+                        <MessageBoby>
+                            <Icon source={require('../uploads/test.png')} />
+                            <Message>Nenhuma tarefa a fazer.</Message>
+                            <FlexAddButton onPress={this.addTask} underlayColor="#dec10c">
+                                <FlexIcon source={require('../uploads/more-task.png')} />
+                            </FlexAddButton>
+                        </MessageBoby>
+                    </>
                 }
                 <Tasks
+                    showsVerticalScrollIndicator={false}
                     data={this.state.lista}
-                    renderItem={({item}) => <TaskList data={item} />}
+                    renderItem={({ item }) => <TaskList data={item} />}
                 />
                 <Add>
                     <FlexAddButton onPress={this.addTask} underlayColor="#dec10c">
@@ -131,8 +134,12 @@ ToDo.navigationOptions = () => {
         headerTitleStyle: {
             color: '#ffffff'
         },
-        tabBarIcon: () => {
-            return <FlexIcon source={require('../uploads/play.png')} />
+        tabBarIcon: ({focused}) => {
+            if(focused) {
+                return <FlexIcon source={require('../uploads/play-active.png')} />
+            } else {
+                return <FlexIcon source={require('../uploads/play.png')} />
+            }
         }
     }
 }

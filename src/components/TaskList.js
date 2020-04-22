@@ -3,13 +3,14 @@ import styled from 'styled-components/native'
 import Sistema from '../Sistema'
 import firebase from '../FirebaseConnection'
 import { Alert } from 'react-native'
+
 const Task = styled.View`
-    background-color:#f1f1f1;
-    border:2px solid #ccc;
+    background-color:#fff;
+    border-left-width:3px;
+    border-color:#5c8efe;
     border-radius:5px;
     padding:10px;
     margin:7px;
-
 `
 const TaskInfo = styled.View`
     
@@ -34,6 +35,7 @@ const BodyFlexStatus = styled.View`
     width:65px;
     margin-right:10px;
     align-items:center;
+    justify-content:center;
 `
 const FlexStatus = styled.Text`
     font-size:9px;
@@ -42,7 +44,7 @@ const FlexStatus = styled.Text`
     text-transform:uppercase;
 `
 const BodyFlexRegister = styled.View`
-    background-color:${props => props.bgRegister};
+    background-color:#eee;
     padding:5px;
     width:190px;
     margin-right:10px;
@@ -361,7 +363,7 @@ export default class TaskList extends Component {
                             <BodyFlexStatus bgStatus="#ff8c00">
                                 <FlexStatus>{this.props.data.task_status}</FlexStatus>
                             </BodyFlexStatus>
-                            <BodyFlexRegister bgRegister="#c4c4c4">
+                            <BodyFlexRegister>
                                 <FlexRegister>Criado: {this.props.data.task_register}</FlexRegister>
                             </BodyFlexRegister>
                         </BodyFlex>
@@ -369,10 +371,10 @@ export default class TaskList extends Component {
                     {this.props.data.task_status == 'Fazendo' &&
                         <>
                             <BodyFlex>
-                                <BodyFlexStatus bgStatus="#1e90ff">
+                                <BodyFlexStatus bgStatus="#5c8efe">
                                     <FlexStatus>{this.props.data.task_status}</FlexStatus>
                                 </BodyFlexStatus>
-                                <BodyFlexRegister bgRegister="#c4c4c4">
+                                <BodyFlexRegister>
                                     <FlexRegister>Iniciado: {this.props.data.task_doing_register}</FlexRegister>
                                 </BodyFlexRegister>
                             </BodyFlex>
@@ -381,10 +383,10 @@ export default class TaskList extends Component {
                     {this.props.data.task_status == 'Pausado' &&
                         <>
                             <BodyFlex>
-                                <BodyFlexStatus bgStatus="#800080">
+                                <BodyFlexStatus bgStatus="#947bff">
                                     <FlexStatus>{this.props.data.task_status}</FlexStatus>
                                 </BodyFlexStatus>
-                                <BodyFlexRegister bgRegister="#c4c4c4">
+                                <BodyFlexRegister>
                                     <FlexRegister>Pausado: {this.props.data.task_pause_register}</FlexRegister>
                                 </BodyFlexRegister>
                             </BodyFlex>
@@ -393,16 +395,16 @@ export default class TaskList extends Component {
                     {this.props.data.task_status == 'Concluído' &&
                         <>
                             <BodyFlex>
-                                <BodyFlexStatus bgStatus="#008000">
+                                <BodyFlexStatus bgStatus="#00a800">
                                     <FlexStatus>{this.props.data.task_status}</FlexStatus>
                                 </BodyFlexStatus>
-                                <BodyFlexRegister bgRegister="#c4c4c4">
+                                <BodyFlexRegister>
                                     <FlexRegister>Concluido: {this.props.data.task_concluded_register}</FlexRegister>
                                 </BodyFlexRegister>
                             </BodyFlex>
 
                             <BodyFlex>
-                                <BodyFlexCountPause bgCountPause="#c4c4c4">
+                                <BodyFlexCountPause bgCountPause="#eee">
                                     <FlexRegister>Qtd Pause: {this.props.data.task_count_pause}
                                     </FlexRegister>
                                 </BodyFlexCountPause>

@@ -4,31 +4,34 @@ import { Platform } from 'react-native'
 import Sistema from '../Sistema'
 import AsyncStorage from '@react-native-community/async-storage'
 
+const Scroll = styled.ScrollView`
+    background-color:#fff;
+`
+const FlexBg = styled.ImageBackground`
+
+`
 const Page = styled.SafeAreaView`
     flex:1;
     padding:20px;
+    margin-top:180px;
 `
 const KeyboardArea = styled.KeyboardAvoidingView`
 
 `
-// const FlexLogo = styled.Image`
-//     width:100%;
-//     height:50px;
-//     margin-bottom:20px;
-//     margin-top:50px;
-// `
-const ErrorMessage = styled.View`
-`
-const ErrorText = styled.Text`
-    font-size:14px;
-    margin-bottom:10px;
-    text-align:center;
+const FlexTitleBody = styled.View `
+    align-items:center;
+
 `
 const FlexTitle = styled.Text`
-    font-size:22px;
-    text-align:center;
+    font-size:20px;
     margin-top:30px;
+    font-weight:200;
+`
+const FlexColorTitle = styled.Text`
+    color:#5c8efe;
+    font-size:26px;
     margin-bottom:50px;
+    font-weight:bold;
 `
 const FlexLabel = styled.Text`
     font-size:10px;
@@ -42,9 +45,16 @@ const FlexAddInput = styled.TextInput`
     border-color:#ccc;
     margin-bottom:20px;
 `
+const ErrorMessage = styled.View`
+`
+const ErrorText = styled.Text`
+    font-size:14px;
+    margin-bottom:10px;
+    text-align:center;
+`
 const FlexBtnLogin = styled.TouchableHighlight`
     align-items:center;
-    background-color:#041938;
+    background-color:#5c8efe;
     padding:15px;
     border-radius:5px;
 `
@@ -52,14 +62,17 @@ const FlexTextBtn = styled.Text`
     color:#fff;
 `
 const Text = styled.Text`
-    color:#414959;
+    
 `
 const FlexBtnRegister = styled.TouchableHighlight`
     align-items:center;
     padding:15px;
 `
+const FlexRegister = styled.Text`
+    color:#aaa;
+`
 const FlexTextBtnRegister = styled.Text`
-    color:#414959;
+    color:#5c8efe;
     font-weight:bold;
 `
 
@@ -97,7 +110,7 @@ class Login extends Component {
                 AsyncStorage.setItem("@password", this.state.password)
 
                 this.props.navigation.navigate('ToDo')
-            } else if(this.state.email == '' && this.state.password == '') {
+            } else if (this.state.email == '' && this.state.password == '') {
                 this.setState({ errorMessage: 'Preencha campo de e-mail e senha!' })
             }
         })
@@ -106,10 +119,10 @@ class Login extends Component {
                 switch (error.code) {
                     case 'auth/wrong-password':
                         this.setState({ errorMessage: 'Ops, senha inválida!' })
-                    break;
+                        break;
                     case 'auth/user-not-found':
                         this.setState({ errorMessage: 'Ops, usuário inválido!' })
-                    break;
+                        break;
                 }
             }))
     }
@@ -120,50 +133,59 @@ class Login extends Component {
 
     render() {
         return (
-            <Page>
-                <KeyboardArea behavior={Platform.OS == 'ios' ? 'padding' : null} keyboardVerticalOffset={80}>
+            <Scroll>
+                <FlexBg source={require('../uploads/background.jpg')} resizeMode="cover" >
+                    <Page>
+                        <KeyboardArea behavior={Platform.OS == 'ios' ? 'padding' : null} keyboardVerticalOffset={80}>
 
-                    {/* <FlexLogo source={require('../uploads/logotipo-azul-min.png')} resizeMode="contain" /> */}
-                    <FlexTitle>Bem vindo ao TaskControll</FlexTitle>
-                    <FlexLabel>E-mail:</FlexLabel>
-                    <FlexAddInput
-                        onChangeText={(email) => this.setState({ email })}
-                        value={this.state.email}
-                        keyboardType="email-address"
-                        autoCapitalize="none"
-                    />
+                            <FlexTitleBody>
+                                <FlexTitle>Bem vindo ao</FlexTitle>
+                                <FlexColorTitle>TaskControll</FlexColorTitle>
+                            </FlexTitleBody>
 
-                    <FlexLabel>Senha:</FlexLabel>
-                    <FlexAddInput
-                        onChangeText={(password) => this.setState({ password })}
-                        value={this.state.password}
-                        secureTextEntry={true}
-                    />
+                            <FlexLabel>E-mail:</FlexLabel>
+                            <FlexAddInput
+                                onChangeText={(email) => this.setState({ email })}
+                                value={this.state.email}
+                                keyboardType="email-address"
+                                autoCapitalize="none"
+                            />
 
-                    <ErrorMessage>
-                        {this.state.errorMessage &&
-                            <ErrorText>{this.state.errorMessage}</ErrorText>
-                        }
-                    </ErrorMessage>
+                            <FlexLabel>Senha:</FlexLabel>
+                            <FlexAddInput
+                                onChangeText={(password) => this.setState({ password })}
+                                value={this.state.password}
+                                secureTextEntry={true}
+                                autoCapitalize="none"
+                            />
 
-                    <FlexBtnLogin onPress={this.logar} underlayColor="#031126">
-                        <FlexTextBtn>Logar</FlexTextBtn>
-                    </FlexBtnLogin>
+                            <ErrorMessage>
+                                {this.state.errorMessage &&
+                                    <ErrorText>{this.state.errorMessage}</ErrorText>
+                                }
+                            </ErrorMessage>
 
-                    <FlexBtnRegister underlayColor="transparent">
-                        <Text>
-                            Novo por aqui? <FlexTextBtnRegister onPress={this.registrar}>Registrar</FlexTextBtnRegister>
-                        </Text>
-                    </FlexBtnRegister>
-                </KeyboardArea>
-            </Page>
+                            <FlexBtnLogin onPress={this.logar} underlayColor="#457bf6">
+                                <FlexTextBtn>Entrar</FlexTextBtn>
+                            </FlexBtnLogin>
+
+                            <FlexBtnRegister underlayColor="transparent">
+                                <Text>
+                                    <FlexRegister>Novo por aqui?</FlexRegister> <FlexTextBtnRegister onPress={this.registrar} underlayColor="#457bf6">Registrar</FlexTextBtnRegister>
+                                </Text>
+                            </FlexBtnRegister>
+                        </KeyboardArea>
+                    </Page>
+                </FlexBg>
+            </Scroll>
         )
     }
 }
 
 Login.navigationOptions = () => {
     return {
-        title: 'FlexApp'
+        title: 'FlexApp',
+        headerShown: false
     }
 }
 

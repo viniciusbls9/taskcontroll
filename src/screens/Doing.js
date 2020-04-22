@@ -8,15 +8,20 @@ import firebase from '../FirebaseConnection'
 const Page = styled.View`
     flex:1;
     padding:10px;
+    background-color:#f6f4fd;
+`
+const MessageBoby = styled.View `
+    align-items:center;
+    margin-top:50px;
+`
+const Icon = styled.Image`
+    width:60px;
+    height:60px;
 `
 const Message = styled.Text `
     font-size:15px;
     text-align:center;
-`
-const MessageClick = styled.Text `
-    font-size:15px;
-    text-align:center;
-    font-weight:bold;
+    color:#aaa;
 `
 const FlexIcon = styled.Image`
     width:20px;
@@ -89,11 +94,14 @@ class Doing extends Component {
             <Page>
                 {this.state.lista == '' &&
                 <>
-                    <Message>Nenhuma tarefa cadastrada.</Message>
-                    <MessageClick onPress={this.addTask}>Adicionar uma nova tarefa</MessageClick>
+                    <MessageBoby>
+                        <Icon source={require('../uploads/test.png')} />
+                        <Message>Nenhuma tarefa em andamento.</Message>
+                    </MessageBoby>
                 </>
                 }
                 <Tasks
+                    showsVerticalScrollIndicator={false}
                     data={this.state.lista}
                     renderItem={({item}) => <TaskList data={item} />}
                 />
@@ -117,8 +125,13 @@ Doing.navigationOptions = () => {
             color:'#ffffff'
         },
         headerLeft: () => null,
-        tabBarIcon: () => {
-            return <FlexIcon source={require('../uploads/time.png')} />
+        tabBarIcon: ({focused}) => {
+            if(focused) {
+                return <FlexIcon source={require('../uploads/time-active.png')} />
+            } else {
+                return <FlexIcon source={require('../uploads/time.png')} />
+
+            }
         }
     }
 }
