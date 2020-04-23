@@ -9,14 +9,18 @@ const Page = styled.View`
     padding:10px;
     background-color:#f6f4fd;
 `
+const MessageBoby = styled.View `
+    align-items:center;
+    margin-top:50px;
+`
+const Icon = styled.Image`
+    width:60px;
+    height:60px;
+`
 const Message = styled.Text `
     font-size:15px;
     text-align:center;
-`
-const MessageClick = styled.Text `
-    font-size:15px;
-    text-align:center;
-    font-weight:bold;
+    color:#aaa;
 `
 const FlexIcon = styled.Image`
     width:20px;
@@ -89,8 +93,10 @@ class Paused extends Component {
             <Page>
                 {this.state.lista == '' &&
                     <>
-                        <Message>Nenhuma tarefa cadastrada.</Message>
-                        <MessageClick onPress={this.addTask}>Adicionar uma nova tarefa</MessageClick>
+                        <MessageBoby>
+                            <Icon source={require('../uploads/test.png')} />
+                            <Message>Nenhuma tarefa a fazer.</Message>
+                        </MessageBoby>
                     </>
                 }
                 <Tasks
@@ -111,9 +117,6 @@ class Paused extends Component {
 Paused.navigationOptions = () => {
     return {
         title: 'Pausados',
-        headerStyle: {
-            backgroundColor: '#040E1F',
-        },
         headerTitleStyle: {
             color: '#ffffff'
         },

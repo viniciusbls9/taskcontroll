@@ -16,8 +16,6 @@ const Scroll = styled.ScrollView`
 
 `
 const TitleBar = styled.TouchableHighlight`
-    flex-direction:row;
-    justify-content:space-between;
     margin-top:14px;
     margin-bottom:30px;
 `
@@ -50,11 +48,11 @@ const FlexAddInput = styled.TextInput`
     margin-bottom:20px;
 `
 const FlexPicker = styled.Picker`
-
+    margin-bottom:20px;
 `
 const FlexBtnAdd = styled.TouchableHighlight`
     align-items:center;
-    background-color:#041938;
+    background-color:#5c8efe;
     padding:15px;
     border-radius:5px;
 `
@@ -217,10 +215,7 @@ class AddTask extends Component {
 
 AddTask.navigationOptions = () => {
     return {
-        title: 'Adicionar',
-        headerStyle: {
-            backgroundColor: '#040E1F',
-        },
+        title: 'Nova tarefa',
         headerTitleStyle: {
             color: '#ffffff'
         },

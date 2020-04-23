@@ -4,12 +4,12 @@ import Sistema from '../Sistema'
 import firebase from '../FirebaseConnection'
 
 const Task = styled.View`
-    background-color:#f1f1f1;
-    border:2px solid #ccc;
+    background-color:#fff;
+    border-left-width:3px;
+    border-color:#5c8efe;
     border-radius:5px;
     padding:10px;
     margin:7px;
-
 `
 const TaskInfo = styled.View`
     

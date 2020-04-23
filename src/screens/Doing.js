@@ -93,12 +93,12 @@ class Doing extends Component {
         return (
             <Page>
                 {this.state.lista == '' &&
-                <>
-                    <MessageBoby>
-                        <Icon source={require('../uploads/test.png')} />
-                        <Message>Nenhuma tarefa em andamento.</Message>
-                    </MessageBoby>
-                </>
+                    <>
+                        <MessageBoby>
+                            <Icon source={require('../uploads/test.png')} />
+                            <Message>Nenhuma tarefa a fazer.</Message>
+                        </MessageBoby>
+                    </>
                 }
                 <Tasks
                     showsVerticalScrollIndicator={false}
@@ -118,9 +118,6 @@ class Doing extends Component {
 Doing.navigationOptions = () => {
     return {
         title:'Fazendo',
-        headerStyle: {
-            backgroundColor:'#040E1F',
-        },
         headerTitleStyle: {
             color:'#ffffff'
         },

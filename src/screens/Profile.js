@@ -13,6 +13,7 @@ window.Blob = RNFetchBlob.polyfill.Blob
 const Page = styled.SafeAreaView`
     flex:1;
     padding:10px;
+    background-color:#f6f4fd;
 `
 const Scroll = styled.ScrollView`
 
@@ -42,7 +43,7 @@ const ProfileImage = styled.Image`
     height:390px;
 `
 const Active = styled.View`
-    background-color:#123d7d;
+    background-color:#75d6ff;
     position:absolute;
     bottom:28px;
     left:8px;
@@ -52,7 +53,7 @@ const Active = styled.View`
     border-radius:10px;
 `
 const AddImage = styled.TouchableHighlight`
-    background-color:#041938;
+    background-color:#5c8efe;
     position:absolute;
     bottom:0;
     right:0;
@@ -94,7 +95,7 @@ const StatsTitle = styled.Text`
 `
 const StatsSubText = styled.Text`
     font-size:12px;
-    color:#c7c7c7;
+    color:#aaa;
     font-weight:500;
     text-transform:uppercase;
     text-align:center;
@@ -102,14 +103,13 @@ const StatsSubText = styled.Text`
 const LastTaskTitle = styled.Text`
     padding-left:8px;
     font-size:16px;
-
 `
 const Tasks = styled.FlatList`
     margin-bottom:50px;
 `
 const FlexLogout = styled.TouchableHighlight`
     align-items:center;
-    background-color:#041938;
+    background-color:#5c8efe;
     padding:15px;
     margin:0 8px 0 10px;
     border-radius:5px;
@@ -370,7 +370,7 @@ class Profile extends Component {
 
 
                     <FlexLogout onPress={this.logout} underlayColor="#031126">
-                        <FlexTextBtn>Logout</FlexTextBtn>
+                        <FlexTextBtn>Sair</FlexTextBtn>
                     </FlexLogout>
                 </Page>
             </Scroll>

@@ -14,6 +14,7 @@ const Page = styled.View`
 const MessageBoby = styled.View`
     align-items:center;
     margin-top:50px;
+    justify-content:center;
 `
 const Message = styled.Text`
     font-size:15px;
@@ -104,9 +105,6 @@ class ToDo extends Component {
                         <MessageBoby>
                             <Icon source={require('../uploads/test.png')} />
                             <Message>Nenhuma tarefa a fazer.</Message>
-                            <FlexAddButton onPress={this.addTask} underlayColor="#dec10c">
-                                <FlexIcon source={require('../uploads/more-task.png')} />
-                            </FlexAddButton>
                         </MessageBoby>
                     </>
                 }
@@ -128,9 +126,6 @@ class ToDo extends Component {
 ToDo.navigationOptions = () => {
     return {
         title: 'A Fazer',
-        headerStyle: {
-            backgroundColor: '#040E1F',
-        },
         headerTitleStyle: {
             color: '#ffffff'
         },
