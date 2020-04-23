@@ -28,6 +28,10 @@ const Icon = styled.Image`
     width:20px;
     height:20px;
 `
+const FlexIcon = styled.Image`
+    width:20px;
+    height:20px;
+`
 const ProfileBody = styled.View`
     align-self:center;
 `
@@ -77,7 +81,7 @@ const NameUser = styled.Text`
     font-weight:200;
     font-size:23px;
 `
-const Message = styled.Text `
+const Message = styled.Text`
     font-size:12px;
 `
 const StatsContainer = styled.View`
@@ -102,10 +106,36 @@ const StatsSubText = styled.Text`
 `
 const LastTaskTitle = styled.Text`
     padding-left:8px;
+    margin-bottom:10px;
     font-size:16px;
 `
 const Tasks = styled.FlatList`
-    margin-bottom:50px;
+    margin-bottom:20px;
+`
+const MessageTask = styled.Text`
+    font-size:15px;
+    margin-left:8px;
+    color:#aaa;
+    margin-bottom:20px;
+`
+const FlexOptions = styled.View `
+    flex-direction:row;
+    margin:0 10px 10px;
+`
+const BodyFlexStatus = styled.TouchableOpacity`
+    border:1px solid #ccc;
+    padding:10px 5px 10px 5px;
+    border-radius:5px;
+    width:100px;
+    margin-right:10px;
+    align-items:center;
+    justify-content:center;
+`
+const FlexStatus = styled.Text`
+    font-size:9px;
+    font-weight:bold;
+    color:#aaa;
+    text-transform:uppercase;
 `
 const FlexLogout = styled.TouchableHighlight`
     align-items:center;
@@ -130,13 +160,14 @@ class Profile extends Component {
             doing: [],
             concluded: [],
             userName: '',
-            message: ''
+            message: '',
+            messageTask: 'Nenhuma tarefa cadastrada'
 
         }
 
         //Traz o nome do usuário logado
         Sistema.addAuthListener((user) => {
-            if(user) {
+            if (user) {
                 let user = this.state.userUid
                 firebase.database().ref('task_users').child(user).child('name').on('value', (snapshot) => {
                     let state = this.state
@@ -179,6 +210,8 @@ class Profile extends Component {
         this.getImage = this.getImage.bind(this)
         this.saveImage = this.saveImage.bind(this)
         this.logout = this.logout.bind(this)
+        this.addClient = this.addClient.bind(this)
+        this.addService = this.addService.bind(this)
 
         // Toda vez que entrar na tela de perfil, esse código busca a foto do usuário
         let storage = firebase.storage().ref().child('userAvatar/' + this.state.userUid + '.jpg')
@@ -304,6 +337,13 @@ class Profile extends Component {
         this.props.navigation.goBack()
     }
 
+    addClient() {
+        this.props.navigation.navigate('AddClient')
+    }
+    addService() {
+        this.props.navigation.navigate('AddService')
+    }
+
     logout() {
         Alert.alert(
             'Não vá embora ):',
@@ -363,13 +403,27 @@ class Profile extends Component {
                     </StatsContainer>
 
                     <LastTaskTitle>Última tarefa cadastrada</LastTaskTitle>
+                    {this.state.listLimit != '' &&
                     <Tasks
                         data={this.state.listLimit}
                         renderItem={({ item }) => <TaskLimit data={item} />}
                     />
+                    }
+                    {this.state.listLimit == '' &&
+                        <MessageTask>Nenhuma tarefa a fazer</MessageTask>
+                    }
 
+                    <LastTaskTitle>Personalizar</LastTaskTitle>
+                    <FlexOptions>
+                        <BodyFlexStatus onPress={this.addClient}>
+                            <FlexStatus>Adicionar Cliente</FlexStatus>
+                        </BodyFlexStatus>
+                        <BodyFlexStatus onPress={this.addService} underlayColor="transparent">
+                            <FlexStatus>Adicionar Serviço</FlexStatus>
+                        </BodyFlexStatus>
+                    </FlexOptions>
 
-                    <FlexLogout onPress={this.logout} underlayColor="#031126">
+                    <FlexLogout onPress={this.logout} underlayColor="#457bf6">
                         <FlexTextBtn>Sair</FlexTextBtn>
                     </FlexLogout>
                 </Page>
@@ -380,14 +434,17 @@ class Profile extends Component {
 
 Profile.navigationOptions = ({ navigation }) => {
     return {
-        title: 'Mais',
-        headerStyle: {
-            backgroundColor: '#040E1F',
-        },
         headerTitleStyle: {
             color: '#ffffff'
         },
-        headerLeft: () => null
+        headerLeft: () => null,
+        tabBarIcon: ({ focused }) => {
+            if (focused) {
+                return <FlexIcon source={require('../uploads/user-active.png')} />
+            } else {
+                return <FlexIcon source={require('../uploads/user.png')} />
+            }
+        }
     }
 }
 

@@ -74,6 +74,7 @@ class Doing extends Component {
                             task_desc:childItem.val().task_desc,
                             client:childItem.val().client,
                             service:childItem.val().service,
+                            priority:childItem.val().priority,
                             task_status:childItem.val().task_status,
                             task_doing_register:childItem.val().task_doing_register,
                             key:childItem.key

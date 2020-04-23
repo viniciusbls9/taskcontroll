@@ -34,6 +34,7 @@ const BodyFlexStatus = styled.View`
     width:65px;
     margin-right:10px;
     align-items:center;
+    justify-content:center;
 `
 const FlexStatus = styled.Text`
     font-size:9px;
@@ -42,7 +43,7 @@ const FlexStatus = styled.Text`
     text-transform:uppercase;
 `
 const BodyFlexRegister = styled.View`
-    background-color:${props => props.bgRegister};
+    background-color:#eee;
     padding:5px;
     width:190px;
     margin-right:10px;
@@ -78,7 +79,7 @@ const FlexIconBtn = styled.Image`
 `
 
 
-export default class TaskList extends Component {
+export default class TaskLimit extends Component {
 
     constructor(props) {
         super(props)
@@ -107,7 +108,7 @@ export default class TaskList extends Component {
                         <BodyFlexStatus bgStatus="#ff8c00">
                             <FlexStatus>{this.props.data.task_status}</FlexStatus>
                         </BodyFlexStatus>
-                        <BodyFlexRegister bgRegister="#c4c4c4">
+                        <BodyFlexRegister>
                             <FlexRegister>Criado: {this.props.data.task_register}</FlexRegister>
                         </BodyFlexRegister>
                     </BodyFlex>

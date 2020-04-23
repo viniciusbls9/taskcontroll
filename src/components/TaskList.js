@@ -9,18 +9,28 @@ const Task = styled.View`
     border-left-width:3px;
     border-color:#5c8efe;
     border-radius:5px;
-    padding:10px;
+    padding:13px;
     margin:7px;
 `
 const TaskInfo = styled.View`
     
 `
-const TaskTitle = styled.Text`
-    font-size:15px;
+const Header = styled.View`
+    flex-direction:row;
+    justify-content:space-between;
     border-bottom-width:1px;
     border-color:#ccc;
-    padding-bottom:10px;
     margin-bottom:10px;
+    padding-bottom:10px;
+`
+const TaskTitle = styled.Text`
+    font-size:15px;
+`
+const TaskPriority = styled.View`
+    width:10px;
+    height:10px;
+    border-radius:5px;
+    background-color:${props => props.bgPriority}
 `
 const TaskDescription = styled.Text`
     font-size:13px;
@@ -89,6 +99,7 @@ export default class TaskList extends Component {
             status: "",
             key: this.props.data.key,
             auth: firebase.auth().currentUser.uid,
+            priority:'',
             task_register: '',
             task_count_pause: '',
             task_pause_register: '',
@@ -101,7 +112,6 @@ export default class TaskList extends Component {
         this.continueTask = this.continueTask.bind(this)
         this.concludedTask = this.concludedTask.bind(this)
         this.deleteTask = this.deleteTask.bind(this)
-
     }
 
 
@@ -138,6 +148,14 @@ export default class TaskList extends Component {
                 // alert(state.task_doing_register)
             })
 
+            /* PEGA A PRIORIDADE DA TAREFA */
+            let priority_val = firebase.database().ref('tasks').child(this.state.auth).child(this.props.data.key).child('priority')
+
+            priority_val.on('value', (snapshot) => {
+                let state = this.state
+                state.priority = snapshot.val()
+            })
+
             /* INFORMAÇÕES DA DATA DE CADASTRO DA TAREFA */
             let date = new Date()
             let day = date.getDate()
@@ -156,20 +174,36 @@ export default class TaskList extends Component {
 
             let state = this.state
             state.task_doing_register = dateFormated + ' às ' + hoursFormated
-
-            firebase.database().ref('tasks').child(auth).child(this.props.data.key).set({
-                task_desc: this.props.data.task_desc,
-                client: this.props.data.client,
-                service: this.props.data.service,
-                task_status: 'Fazendo',
-                task_pause_register: '',
-                task_continue_register: '',
-                task_concluded_register: '',
-                task_time_sum: '',
-                task_count_pause: 0,
-                task_doing_register: this.state.task_doing_register,
-                task_register: this.state.task_register
-            })
+            if(!this.state.priority) {
+                firebase.database().ref('tasks').child(auth).child(this.props.data.key).set({
+                    task_desc: this.props.data.task_desc,
+                    client: this.props.data.client,
+                    service: this.props.data.service,
+                    task_status: 'Fazendo',
+                    task_pause_register: '',
+                    task_continue_register: '',
+                    task_concluded_register: '',
+                    task_time_sum: '',
+                    task_count_pause: 0,
+                    task_doing_register: this.state.task_doing_register,
+                    task_register: this.state.task_register
+                })
+            } else {
+                firebase.database().ref('tasks').child(auth).child(this.props.data.key).set({
+                    task_desc: this.props.data.task_desc,
+                    client: this.props.data.client,
+                    service: this.props.data.service,
+                    priority: this.props.data.priority,
+                    task_status: 'Fazendo',
+                    task_pause_register: '',
+                    task_continue_register: '',
+                    task_concluded_register: '',
+                    task_time_sum: '',
+                    task_count_pause: 0,
+                    task_doing_register: this.state.task_doing_register,
+                    task_register: this.state.task_register
+                })
+            }
         })
     }
 
@@ -196,6 +230,14 @@ export default class TaskList extends Component {
                 // alert(state.task_count_pause)
             })
 
+            /* PEGA A PRIORIDADE DA TAREFA */
+            let priority_val = firebase.database().ref('tasks').child(this.state.auth).child(this.props.data.key).child('priority')
+
+            priority_val.on('value', (snapshot) => {
+                let state = this.state
+                state.priority = snapshot.val()
+            })
+
             /* INFORMAÇÕES DA DATA DE CADASTRO DA TAREFA */
             let date = new Date()
             let day = date.getDate()
@@ -215,7 +257,7 @@ export default class TaskList extends Component {
             let state = this.state
             state.task_pause_register = dateFormated + ' às ' + hoursFormated
 
-            if (this.state.task_count_pause == 0) {
+            if (this.state.task_count_pause == 0 && !this.state.priority) {
                 firebase.database().ref('tasks').child(auth).child(this.props.data.key).set({
                     task_desc: this.props.data.task_desc,
                     client: this.props.data.client,
@@ -234,6 +276,7 @@ export default class TaskList extends Component {
                     task_desc: this.props.data.task_desc,
                     client: this.props.data.client,
                     service: this.props.data.service,
+                    priority: this.props.data.priority,
                     task_status: 'Pausado',
                     task_pause_register: this.state.task_pause_register,
                     task_continue_register: '',
@@ -247,7 +290,6 @@ export default class TaskList extends Component {
         })
     }
     continueTask() {
-
         Sistema.addAuthListener(() => {
             firebase.database().ref('tasks').child(this.state.auth).child(this.props.data.key).child('task_status').set('Fazendo')
         })
@@ -293,7 +335,13 @@ export default class TaskList extends Component {
                 state.task_pause_register = snapshot.val()
             })
 
+            /* PEGA A PRIORIDADE DA TAREFA */
+            let priority_val = firebase.database().ref('tasks').child(this.state.auth).child(this.props.data.key).child('priority')
 
+            priority_val.on('value', (snapshot) => {
+                let state = this.state
+                state.priority = snapshot.val()
+            })
 
 
             /* INFORMAÇÕES DA DATA DE CADASTRO DA TAREFA */
@@ -315,22 +363,38 @@ export default class TaskList extends Component {
             let state = this.state
             state.task_concluded_register = dateFormated + ' ' + hoursFormated
 
-            firebase.database().ref('tasks').child(auth).child(this.props.data.key).set({
-                task_desc: this.props.data.task_desc,
-                client: this.props.data.client,
-                service: this.props.data.service,
-                task_status: 'Concluído',
-                task_pause_register: this.state.task_pause_register,
-                task_continue_register: '',
-                task_concluded_register: this.state.task_concluded_register,
-                task_time_sum: '',
-                task_count_pause: this.state.task_count_pause,
-                task_doing_register: this.state.task_doing_register,
-                task_register: this.state.task_register
-            })
+            if(!this.state.priority) {
+                firebase.database().ref('tasks').child(auth).child(this.props.data.key).set({
+                    task_desc: this.props.data.task_desc,
+                    client: this.props.data.client,
+                    service: this.props.data.service,
+                    task_status: 'Concluído',
+                    task_pause_register: this.state.task_pause_register,
+                    task_continue_register: '',
+                    task_concluded_register: this.state.task_concluded_register,
+                    task_time_sum: '',
+                    task_count_pause: this.state.task_count_pause,
+                    task_doing_register: this.state.task_doing_register,
+                    task_register: this.state.task_register
+                })
+            } else {
+                firebase.database().ref('tasks').child(auth).child(this.props.data.key).set({
+                    task_desc: this.props.data.task_desc,
+                    client: this.props.data.client,
+                    service: this.props.data.service,
+                    priority: this.props.data.priority,
+                    task_status: 'Concluído',
+                    task_pause_register: this.state.task_pause_register,
+                    task_continue_register: '',
+                    task_concluded_register: this.state.task_concluded_register,
+                    task_time_sum: '',
+                    task_count_pause: this.state.task_count_pause,
+                    task_doing_register: this.state.task_doing_register,
+                    task_register: this.state.task_register
+                })
+            }
         })
     }
-
 
     deleteTask() {
         Alert.alert(
@@ -356,7 +420,20 @@ export default class TaskList extends Component {
         return (
             <Task>
                 <TaskInfo>
-                    <TaskTitle>{this.props.data.client + ' - ' + this.props.data.service}</TaskTitle>
+                    <Header>
+                        <TaskTitle>{this.props.data.client + ' - ' + this.props.data.service}</TaskTitle>
+
+                        {this.props.data.priority == 'Baixa' &&
+                            <TaskPriority bgPriority="#68f282"></TaskPriority>
+                        }
+                        {this.props.data.priority == 'Média' &&
+                            <TaskPriority bgPriority="#ff98f5"></TaskPriority>
+                        }
+                        {this.props.data.priority == 'Alta' &&
+                            <TaskPriority bgPriority="#ff7575"></TaskPriority>
+                        }
+
+                    </Header>
                     <TaskDescription numberOfLines={2} >{this.props.data.task_desc}</TaskDescription>
                     {this.props.data.task_status == 'A fazer' &&
                         <BodyFlex>

@@ -73,6 +73,7 @@ class Concluded extends Component {
                             task_desc:childItem.val().task_desc,
                             client:childItem.val().client,
                             service:childItem.val().service,
+                            priority:childItem.val().priority,
                             task_status:childItem.val().task_status,
                             task_concluded_register:childItem.val().task_concluded_register,
                             task_count_pause:childItem.val().task_count_pause,

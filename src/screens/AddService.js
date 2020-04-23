@@ -59,8 +59,6 @@ class AddTask extends Component {
             task_continue_register: '',
             task_concluded_register: '',
             task_doing_register: '',
-            clients:[],
-            services:[],
             client: 0,
             clients: [
                 { name: 'Selecione' },
@@ -84,6 +82,7 @@ class AddTask extends Component {
                 { name: 'Alta' }
             ]
         }
+
         this.insertTask = this.insertTask.bind(this)
         this.back = this.back.bind(this)
     }
@@ -135,6 +134,7 @@ class AddTask extends Component {
                     task_desc: '',
                     client: '',
                     service: ''
+
                 })
             })
         } else {
@@ -216,7 +216,7 @@ class AddTask extends Component {
 
 AddTask.navigationOptions = () => {
     return {
-        title: 'Nova tarefa',
+        title: 'Novo Serviço',
         headerTitleStyle: {
             color: '#ffffff'
         },

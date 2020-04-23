@@ -5,12 +5,16 @@ import Register from '../screens/Register'
 import TaskControll from './TaskControll'
 import AddTask from '../screens/AddTask'
 import Preload from '../screens/Preload'
+import AddClient from '../screens/AddClient'
+import AddService from '../screens/AddService'
 
 const MainNavigator = createStackNavigator({
     Preload,
     Login,
     Register,
     AddTask,
+    AddClient,
+    AddService,
     TaskControll
 }, {
     defaultNavigationOptions:{

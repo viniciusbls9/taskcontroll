@@ -73,6 +73,7 @@ class Paused extends Component {
                             task_desc:childItem.val().task_desc,
                             client:childItem.val().client,
                             service:childItem.val().service,
+                            priority:childItem.val().priority,
                             task_status:childItem.val().task_status,
                             task_pause_register:childItem.val().task_pause_register,
                             key:childItem.key

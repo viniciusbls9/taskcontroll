@@ -75,11 +75,11 @@ class ToDo extends Component {
                     state.lista = []
 
                     snapshot.forEach((childItem) => {
-
                         state.lista.push({
                             task_desc:childItem.val().task_desc,
                             client:childItem.val().client,
                             service:childItem.val().service,
+                            priority:childItem.val().priority,
                             task_status:childItem.val().task_status,
                             task_register:childItem.val().task_register,
                             key:childItem.key
