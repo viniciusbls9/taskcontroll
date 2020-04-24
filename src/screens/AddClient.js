@@ -59,6 +59,17 @@ class AddTask extends Component {
         }
         this.insertClient = this.insertClient.bind(this)
         this.back = this.back.bind(this)
+
+        // let timestamp = 26964
+        // let time = new Date(timestamp)
+        // // let hours = time.getHours() + 1
+        // let minutes = time.getSeconds()
+        // let seconds = time.getSeconds()
+        // let month = time.getMonth() + 1
+        // let year = time.getFullYear()
+        // let date = time.getDate()
+        // console.log(minutes)
+
     }
 
     insertClient() {

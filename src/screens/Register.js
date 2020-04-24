@@ -236,7 +236,7 @@ class Register extends Component {
                                 }
                             </ErrorMessage>
 
-                            <FlexBtnLogin onPress={this.register} underlayColor="#031126">
+                            <FlexBtnLogin onPress={this.register} underlayColor="#457bf6">
                                 <FlexTextBtn>Criar conta</FlexTextBtn>
                             </FlexBtnLogin>
 

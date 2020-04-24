@@ -157,23 +157,23 @@ export default class TaskList extends Component {
             })
 
             /* INFORMAÇÕES DA DATA DE CADASTRO DA TAREFA */
-            let date = new Date()
-            let day = date.getDate()
-            let month = date.getMonth()
-            let year = date.getFullYear()
-            let hours = date.getHours()
-            let min = date.getMinutes()
-            let sec = date.getSeconds()
 
-            day = day < 10 ? '0' + day : day
-            month = (month + 1) < 10 ? '0' + (month + 1) : (month + 1)
-            min = min < 10 ? '0' + min : min
+            // let day = date.getDate()
+            // let month = date.getMonth()
+            // let year = date.getFullYear()
+            // let hours = date.getHours()
+            // let min = date.getMinutes()
+            // let sec = date.getSeconds()
 
-            let dateFormated = day + '/' + month + '/' + year
-            let hoursFormated = (hours + 1) + ':' + min + ':' + sec
+            // day = day < 10 ? '0' + day : day
+            // month = (month + 1) < 10 ? '0' + (month + 1) : (month + 1)
+            // min = min < 10 ? '0' + min : min
 
-            let state = this.state
-            state.task_doing_register = dateFormated + ' às ' + hoursFormated
+            // let dateFormated = day + '/' + month + '/' + year
+            // let hoursFormated = (hours + 1) + ':' + min + ':' + sec
+
+            // let state = this.state
+            // state.task_doing_register = dateFormated + ' às ' + hoursFormated
             if(!this.state.priority) {
                 firebase.database().ref('tasks').child(auth).child(this.props.data.key).set({
                     task_desc: this.props.data.task_desc,
@@ -185,7 +185,7 @@ export default class TaskList extends Component {
                     task_concluded_register: '',
                     task_time_sum: '',
                     task_count_pause: 0,
-                    task_doing_register: this.state.task_doing_register,
+                    task_doing_register: Date.now(),
                     task_register: this.state.task_register
                 })
             } else {
@@ -200,7 +200,7 @@ export default class TaskList extends Component {
                     task_concluded_register: '',
                     task_time_sum: '',
                     task_count_pause: 0,
-                    task_doing_register: this.state.task_doing_register,
+                    task_doing_register: Date.now(),
                     task_register: this.state.task_register
                 })
             }
@@ -238,24 +238,24 @@ export default class TaskList extends Component {
                 state.priority = snapshot.val()
             })
 
-            /* INFORMAÇÕES DA DATA DE CADASTRO DA TAREFA */
-            let date = new Date()
-            let day = date.getDate()
-            let month = date.getMonth()
-            let year = date.getFullYear()
-            let hours = date.getHours()
-            let min = date.getMinutes()
-            let sec = date.getSeconds()
+            // /* INFORMAÇÕES DA DATA DE CADASTRO DA TAREFA */
+            // let date = new Date()
+            // let day = date.getDate()
+            // let month = date.getMonth()
+            // let year = date.getFullYear()
+            // let hours = date.getHours()
+            // let min = date.getMinutes()
+            // let sec = date.getSeconds()
 
-            day = day < 10 ? '0' + day : day
-            month = (month + 1) < 10 ? '0' + (month + 1) : (month + 1)
-            min = min < 10 ? '0' + min : min
+            // day = day < 10 ? '0' + day : day
+            // month = (month + 1) < 10 ? '0' + (month + 1) : (month + 1)
+            // min = min < 10 ? '0' + min : min
 
-            let dateFormated = day + '/' + month + '/' + year
-            let hoursFormated = (hours + 1) + ':' + min + ':' + sec
+            // let dateFormated = day + '/' + month + '/' + year
+            // let hoursFormated = (hours + 1) + ':' + min + ':' + sec
 
-            let state = this.state
-            state.task_pause_register = dateFormated + ' às ' + hoursFormated
+            // let state = this.state
+            // state.task_pause_register = dateFormated + ' às ' + hoursFormated
 
             if (this.state.task_count_pause == 0 && !this.state.priority) {
                 firebase.database().ref('tasks').child(auth).child(this.props.data.key).set({
@@ -263,7 +263,7 @@ export default class TaskList extends Component {
                     client: this.props.data.client,
                     service: this.props.data.service,
                     task_status: 'Pausado',
-                    task_pause_register: this.state.task_pause_register,
+                    task_pause_register: Date.now(),
                     task_continue_register: '',
                     task_concluded_register: '',
                     task_time_sum: '',
@@ -278,7 +278,7 @@ export default class TaskList extends Component {
                     service: this.props.data.service,
                     priority: this.props.data.priority,
                     task_status: 'Pausado',
-                    task_pause_register: this.state.task_pause_register,
+                    task_pause_register: Date.now(),
                     task_continue_register: '',
                     task_concluded_register: '',
                     task_time_sum: '',
@@ -345,23 +345,23 @@ export default class TaskList extends Component {
 
 
             /* INFORMAÇÕES DA DATA DE CADASTRO DA TAREFA */
-            let date = new Date()
-            let day = date.getDate()
-            let month = date.getMonth()
-            let year = date.getFullYear()
-            let hours = date.getHours()
-            let min = date.getMinutes()
-            let sec = date.getSeconds()
+            // let date = new Date()
+            // let day = date.getDate()
+            // let month = date.getMonth()
+            // let year = date.getFullYear()
+            // let hours = date.getHours()
+            // let min = date.getMinutes()
+            // let sec = date.getSeconds()
 
-            day = day < 10 ? '0' + day : day
-            month = (month + 1) < 10 ? '0' + (month + 1) : (month + 1)
-            min = min < 10 ? '0' + min : min
+            // day = day < 10 ? '0' + day : day
+            // month = (month + 1) < 10 ? '0' + (month + 1) : (month + 1)
+            // min = min < 10 ? '0' + min : min
 
-            let dateFormated = day + '/' + month + '/' + year
-            let hoursFormated = (hours + 1) + ':' + min + ':' + sec
+            // let dateFormated = day + '/' + month + '/' + year
+            // let hoursFormated = (hours + 1) + ':' + min + ':' + sec
 
-            let state = this.state
-            state.task_concluded_register = dateFormated + ' ' + hoursFormated
+            // let state = this.state
+            // state.task_concluded_register = dateFormated + ' ' + hoursFormated
 
             if(!this.state.priority) {
                 firebase.database().ref('tasks').child(auth).child(this.props.data.key).set({
@@ -371,7 +371,7 @@ export default class TaskList extends Component {
                     task_status: 'Concluído',
                     task_pause_register: this.state.task_pause_register,
                     task_continue_register: '',
-                    task_concluded_register: this.state.task_concluded_register,
+                    task_concluded_register: Date.now(),
                     task_time_sum: '',
                     task_count_pause: this.state.task_count_pause,
                     task_doing_register: this.state.task_doing_register,
@@ -386,7 +386,7 @@ export default class TaskList extends Component {
                     task_status: 'Concluído',
                     task_pause_register: this.state.task_pause_register,
                     task_continue_register: '',
-                    task_concluded_register: this.state.task_concluded_register,
+                    task_concluded_register: Date.now(),
                     task_time_sum: '',
                     task_count_pause: this.state.task_count_pause,
                     task_doing_register: this.state.task_doing_register,
@@ -417,6 +417,24 @@ export default class TaskList extends Component {
 
     render() {
 
+        let date = new Date()
+        let day = date.getDate()
+        let month = date.getMonth()
+        let year = date.getFullYear()
+        let hours = date.getHours()
+        let min = date.getMinutes()
+        let sec = date.getSeconds()
+
+        day = day < 10 ? '0' + day : day
+        month = (month + 1) < 10 ? '0' + (month + 1) : (month + 1)
+        min = min < 10 ? '0' + min : min
+
+        let dateFormated = day + '/' + month + '/' + year
+        let hoursFormated = (hours + 1) + ':' + min + ':' + sec
+
+        let allFormated = dateFormated + ' às ' + hoursFormated
+
+
         return (
             <Task>
                 <TaskInfo>
@@ -441,7 +459,7 @@ export default class TaskList extends Component {
                                 <FlexStatus>{this.props.data.task_status}</FlexStatus>
                             </BodyFlexStatus>
                             <BodyFlexRegister>
-                                <FlexRegister>Criado: {this.props.data.task_register}</FlexRegister>
+                                <FlexRegister>Criado: {allFormated}</FlexRegister>
                             </BodyFlexRegister>
                         </BodyFlex>
                     }
@@ -452,7 +470,7 @@ export default class TaskList extends Component {
                                     <FlexStatus>{this.props.data.task_status}</FlexStatus>
                                 </BodyFlexStatus>
                                 <BodyFlexRegister>
-                                    <FlexRegister>Iniciado: {this.props.data.task_doing_register}</FlexRegister>
+                                    <FlexRegister>Iniciado: {allFormated}</FlexRegister>
                                 </BodyFlexRegister>
                             </BodyFlex>
                         </>
@@ -464,7 +482,7 @@ export default class TaskList extends Component {
                                     <FlexStatus>{this.props.data.task_status}</FlexStatus>
                                 </BodyFlexStatus>
                                 <BodyFlexRegister>
-                                    <FlexRegister>Pausado: {this.props.data.task_pause_register}</FlexRegister>
+                                    <FlexRegister>Pausado: {allFormated}</FlexRegister>
                                 </BodyFlexRegister>
                             </BodyFlex>
                         </>
@@ -476,14 +494,16 @@ export default class TaskList extends Component {
                                     <FlexStatus>{this.props.data.task_status}</FlexStatus>
                                 </BodyFlexStatus>
                                 <BodyFlexRegister>
-                                    <FlexRegister>Concluido: {this.props.data.task_concluded_register}</FlexRegister>
+                                    <FlexRegister>Concluido: {allFormated}</FlexRegister>
                                 </BodyFlexRegister>
                             </BodyFlex>
 
                             <BodyFlex>
                                 <BodyFlexCountPause bgCountPause="#eee">
-                                    <FlexRegister>Qtd Pause: {this.props.data.task_count_pause}
-                                    </FlexRegister>
+                                    <FlexRegister>Qtd Pause: {this.props.data.task_count_pause}</FlexRegister>
+                                </BodyFlexCountPause>
+                                <BodyFlexCountPause bgCountPause="#eee">
+                                    <FlexRegister>tempo de tarefa: {this.props.data.task_time_sum}</FlexRegister>
                                 </BodyFlexCountPause>
                             </BodyFlex>
                         </>
@@ -549,7 +569,7 @@ export default class TaskList extends Component {
                         </FlexBtn>
                     </FlexTaskBtn>
                 }
-            </Task >
+            </Task>
         )
     }
 }

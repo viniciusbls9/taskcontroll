@@ -12,5 +12,4 @@ const DrawerNavigator = createDrawerNavigator({
     Paused,
     Concluded
 })
-
 export default DrawerNavigator

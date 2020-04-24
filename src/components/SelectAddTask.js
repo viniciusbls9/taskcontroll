@@ -3,8 +3,7 @@ import styled from 'styled-components/native'
 import firebase from '../FirebaseConnection'
 
 const Page = styled.SafeAreaView`
-    flex:1;
-    padding:20px;
+
 `
 const FlexLabel = styled.Text`
     font-size:10px;
@@ -41,19 +40,34 @@ export default class SelectAddTask extends Component {
                 })
             })
             this.setState(state)
-            // alert(state.clients)
+        })
+
+        /*BUSCA SERVIÇOS INSERIDOS PELO USUÁRIO NO BANCO*/
+        let service_val = firebase.database().ref('services').child(auth)
+
+        service_val.on('value', (snapshot) => {
+            let state = this.state
+            state.services = []
+
+            snapshot.forEach((childItem) => {
+                state.services.push({
+                    new_service:childItem.val().name,
+                    key:childItem.key
+                })
+            })
+            this.setState(state)
         })
     }
 
     render() {
 
         let clientsItems = this.state.clients.map((v, k) => {
-            return <FlexPicker.Item key={k} value={v.name} label={'v.name'} />
+            return <FlexPicker.Item key={k.key} value={v.new_client} label={v.new_client} />
         })
 
-        // let servicesItems = this.state.services.map((v, k) => {
-        //     return <FlexPicker.Item key={k} value={v.name} label={v.name} />
-        // })
+        let servicesItems = this.state.services.map((v, k) => {
+            return <FlexPicker.Item key={k.key} value={v.new_service} label={v.new_service} />
+        })
 
         return (
             <Page>
@@ -64,18 +78,20 @@ export default class SelectAddTask extends Component {
                     onValueChange={(itemValue, itemIndex) => this.setState({ client: itemValue })}
                     value={this.state.client}
                 >
+                    <FlexPicker.Item key={0} value={'Selecione...'} label={'Selecione...'} />
                     {clientsItems}
                 </FlexPicker>
 
                 <FlexLabel>Serviço</FlexLabel>
-                {/* <FlexPicker
+                <FlexPicker
                     selectedValue={this.state.service}
                     onValueChange={(itemValue, itemIndex) => this.setState({ service: itemValue })}
                     value={this.state.service}
                 >
+                    <FlexPicker.Item key={0} value={'Selecione...'} label={'Selecione...'} />
                     {servicesItems}
 
-                </FlexPicker> */}
+                </FlexPicker>
             </Page>
         )
     }

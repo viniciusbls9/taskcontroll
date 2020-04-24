@@ -1,19 +1,15 @@
 import React, { Component } from 'react'
 import styled from 'styled-components/native'
-import { Platform } from 'react-native'
 import Sistema from '../Sistema'
 import firebase from '../FirebaseConnection'
 
 const Page = styled.SafeAreaView`
     flex:1;
     padding:20px;
+    background-color:#fff;
 `
-const KeyboardArea = styled.KeyboardAvoidingView`
-    
-`
-const Scroll = styled.ScrollView`
-
-`
+const KeyboardArea = styled.KeyboardAvoidingView``
+const Scroll = styled.ScrollView``
 const TitleBar = styled.TouchableHighlight`
     margin-top:14px;
     margin-bottom:50px;
@@ -37,6 +33,12 @@ const FlexAddInput = styled.TextInput`
 const FlexPicker = styled.Picker`
     margin-bottom:20px;
 `
+const Message = styled.Text`
+    font-size:14px;
+    text-align:center;
+    color:#ff7575;
+    padding:10px;
+`
 const FlexBtnAdd = styled.TouchableHighlight`
     align-items:center;
     background-color:#5c8efe;
@@ -52,6 +54,7 @@ class AddTask extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            message: '',
             task_desc: '',
             task_status: 'A fazer',
             task_register: '',
@@ -59,60 +62,83 @@ class AddTask extends Component {
             task_continue_register: '',
             task_concluded_register: '',
             task_doing_register: '',
-            clients:[],
-            services:[],
-            client: 0,
-            clients: [
-                { name: 'Selecione' },
-                { name: 'Iphome' },
-                { name: 'Santos Global' },
-                { name: 'Cristina Corretora' },
-                { name: 'Vinicius' }
-            ],
-            service: 0,
-            services: [
-                { name: 'Selecione' },
-                { name: 'Criação de site' },
-                { name: 'Acompanhamento Campnhas Google ADS' },
-                { name: 'Aplicativo' }
-            ],
-            priority:0,
+            priority: 0,
             prioritys: [
-                { name: 'Selecione' },
+                { name: 'Selecione...' },
                 { name: 'Baixa' },
-                { name: 'Média'},
+                { name: 'Média' },
                 { name: 'Alta' }
-            ]
+            ],
+            client: 0,
+            clients: [],
+            service: 0,
+            services: []
         }
         this.insertTask = this.insertTask.bind(this)
         this.back = this.back.bind(this)
+
+        /* BUSCA CLIENTES INSERIDOS PELO USUÁRIO NO BANCO */
+        let auth = firebase.auth().currentUser.uid
+        let client_val = firebase.database().ref('clients').child(auth)
+
+        client_val.on('value', (snapshot) => {
+            let state = this.state
+            state.clients = []
+
+            snapshot.forEach((childItem) => {
+                state.clients.push({
+                    new_client: childItem.val().name,
+                    key: childItem.key
+                })
+            })
+            this.setState(state)
+        })
+
+        /*BUSCA SERVIÇOS INSERIDOS PELO USUÁRIO NO BANCO*/
+        let service_val = firebase.database().ref('services').child(auth)
+
+        service_val.on('value', (snapshot) => {
+            let state = this.state
+            state.services = []
+
+            snapshot.forEach((childItem) => {
+                state.services.push({
+                    new_service: childItem.val().name,
+                    key: childItem.key
+                })
+            })
+            this.setState(state)
+        })
+
     }
 
     insertTask() {
         if (this.state.task_desc != '' && this.state.service != '') {
-            Sistema.getUserInfo((snapshot) => {
+            Sistema.getUserInfo(() => {
                 /* PEGA INFORMAÇÕES DO USUÁRIO */
                 let auth = firebase.auth().currentUser.uid
                 let task = firebase.database().ref('tasks').child(auth)
 
+                let timestamp = Date.now()
+
                 /* INFORMAÇÕES DA DATA DE CADASTRO DA TAREFA */
-                let date = new Date()
-                let day = date.getDate()
-                let month = date.getMonth()
-                let year = date.getFullYear()
-                let hours = date.getHours()
-                let min = date.getMinutes()
-                let sec = date.getSeconds()
+                // let date = new Date()
+                // let day = date.getDate()
+                // let month = date.getMonth()
+                // let year = date.getFullYear()
+                // let hours = date.getHours()
+                // let min = date.getMinutes()
+                // let sec = date.getSeconds()
 
-                day = day < 10 ? '0' + day : day
-                month = (month + 1) < 10 ? '0' + (month + 1) : (month + 1)
-                min = min < 10 ? '0' + min : min
+                // day = day < 10 ? '0' + day : day
+                // month = (month + 1) < 10 ? '0' + (month + 1) : (month + 1)
+                // min = min < 10 ? '0' + min : min
 
-                let dateFormated = day + '/' + month + '/' + year
-                let hoursFormated = hours + ':' + min + ':' + sec
+                // let dateFormated = day + '/' + month + '/' + year
+                // let hoursFormated = hours + ':' + min + ':' + sec
 
-                let state = this.state
-                state.task_register = dateFormated + ' às ' + hoursFormated
+                // let state = this.state
+                // state.task_register = dateFormated + ' às ' + hoursFormated
 
                 /* CADASTRO DA TAREFA COM AS INFORMAÇÕES INSERIDAS NOS FORMULÁRIOS */
                 let keyTask = task.push().key
@@ -120,7 +146,7 @@ class AddTask extends Component {
                     task_desc: this.state.task_desc,
                     client: this.state.client,
                     service: this.state.service,
-                    priority:this.state.priority,
+                    priority: this.state.priority,
                     task_status: this.state.task_status,
                     task_pause_register: '',
                     task_continue_register: '',
@@ -128,7 +154,7 @@ class AddTask extends Component {
                     task_doing_register: '',
                     task_time_sum: '',
                     task_count_pause: 0,
-                    task_register: this.state.task_register
+                    task_register: timestamp
                 })
                 this.props.navigation.navigate('ToDo')
                 this.setState({
@@ -138,7 +164,7 @@ class AddTask extends Component {
                 })
             })
         } else {
-            alert('Não foi possível cadastrar a tarefa.')
+            this.setState({ message: 'Adicione um cliente ou serviço para cadastrar a tarefa' })
         }
     }
 
@@ -146,13 +172,12 @@ class AddTask extends Component {
         this.props.navigation.goBack()
     }
 
-
     render() {
         let clientsItems = this.state.clients.map((v, k) => {
-            return <FlexPicker.Item key={k} value={v.name} label={v.name} />
+            return <FlexPicker.Item key={k.key} value={v.new_client} label={v.new_client} />
         })
         let servicesItems = this.state.services.map((v, k) => {
-            return <FlexPicker.Item key={k} value={v.name} label={v.name} />
+            return <FlexPicker.Item key={k.key} value={v.new_service} label={v.new_service} />
         })
         let priorityItems = this.state.prioritys.map((v, k) => {
             return <FlexPicker.Item key={k} value={v.name} label={v.name} />
@@ -180,8 +205,8 @@ class AddTask extends Component {
                             onValueChange={(itemValue, itemIndex) => this.setState({ client: itemValue })}
                             value={this.state.client}
                         >
+                            <FlexPicker.Item key={0} value={'Selecione...'} label={'Selecione...'} />
                             {clientsItems}
-
                         </FlexPicker>
 
                         <FlexLabel>Serviço</FlexLabel>
@@ -190,6 +215,7 @@ class AddTask extends Component {
                             onValueChange={(itemValue, itemIndex) => this.setState({ service: itemValue })}
                             value={this.state.service}
                         >
+                            <FlexPicker.Item key={0} value={'Selecione...'} label={'Selecione...'} />
                             {servicesItems}
 
                         </FlexPicker>
@@ -202,6 +228,8 @@ class AddTask extends Component {
                         >
                             {priorityItems}
                         </FlexPicker>
+
+                        <Message>{this.state.message}</Message>
 
                         <FlexBtnAdd onPress={this.insertTask} underlayColor="#457bf6">
                             <FlexTextBtn>Adicionar</FlexTextBtn>

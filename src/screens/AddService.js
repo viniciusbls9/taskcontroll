@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import styled from 'styled-components/native'
-import { Platform } from 'react-native'
 import Sistema from '../Sistema'
 import firebase from '../FirebaseConnection'
 
@@ -34,8 +33,11 @@ const FlexAddInput = styled.TextInput`
     border-color:#ccc;
     margin-bottom:20px;
 `
-const FlexPicker = styled.Picker`
-    margin-bottom:20px;
+const Message = styled.Text`
+    font-size:14px;
+    text-align:center;
+    color:#ff7575;
+    padding:10px;
 `
 const FlexBtnAdd = styled.TouchableHighlight`
     align-items:center;
@@ -52,93 +54,46 @@ class AddTask extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            task_desc: '',
-            task_status: 'A fazer',
-            task_register: '',
-            task_pause_register: '',
-            task_continue_register: '',
-            task_concluded_register: '',
-            task_doing_register: '',
-            client: 0,
-            clients: [
-                { name: 'Selecione' },
-                { name: 'Iphome' },
-                { name: 'Santos Global' },
-                { name: 'Cristina Corretora' },
-                { name: 'Vinicius' }
-            ],
-            service: 0,
-            services: [
-                { name: 'Selecione' },
-                { name: 'Criação de site' },
-                { name: 'Acompanhamento Campnhas Google ADS' },
-                { name: 'Aplicativo' }
-            ],
-            priority:0,
-            prioritys: [
-                { name: 'Selecione' },
-                { name: 'Baixa' },
-                { name: 'Média'},
-                { name: 'Alta' }
-            ]
+            task_new_service: '',
+            message:''
         }
-
-        this.insertTask = this.insertTask.bind(this)
+        this.insertClient = this.insertClient.bind(this)
         this.back = this.back.bind(this)
+
+        // let timestamp = 26964
+        // let time = new Date(timestamp)
+        // // let hours = time.getHours() + 1
+        // let minutes = time.getSeconds()
+        // let seconds = time.getSeconds()
+        // let month = time.getMonth() + 1
+        // let year = time.getFullYear()
+        // let date = time.getDate()
+        // console.log(minutes)
+
     }
 
-    insertTask() {
-        if (this.state.task_desc != '' && this.state.service != '') {
-            Sistema.getUserInfo((snapshot) => {
+    insertClient() {
+        if (this.state.task_new_service != '') {
+            Sistema.getUserInfo(() => {
+
                 /* PEGA INFORMAÇÕES DO USUÁRIO */
                 let auth = firebase.auth().currentUser.uid
-                let task = firebase.database().ref('tasks').child(auth)
+                let newService = firebase.database().ref('services').child(auth)
 
-                /* INFORMAÇÕES DA DATA DE CADASTRO DA TAREFA */
-                let date = new Date()
-                let day = date.getDate()
-                let month = date.getMonth()
-                let year = date.getFullYear()
-                let hours = date.getHours()
-                let min = date.getMinutes()
-                let sec = date.getSeconds()
-
-                day = day < 10 ? '0' + day : day
-                month = (month + 1) < 10 ? '0' + (month + 1) : (month + 1)
-                min = min < 10 ? '0' + min : min
-
-                let dateFormated = day + '/' + month + '/' + year
-                let hoursFormated = hours + ':' + min + ':' + sec
-
-                let state = this.state
-                state.task_register = dateFormated + ' às ' + hoursFormated
-
-                /* CADASTRO DA TAREFA COM AS INFORMAÇÕES INSERIDAS NOS FORMULÁRIOS */
-                let keyTask = task.push().key
-                task.child(keyTask).set({
-                    task_desc: this.state.task_desc,
-                    client: this.state.client,
-                    service: this.state.service,
-                    priority:this.state.priority,
-                    task_status: this.state.task_status,
-                    task_pause_register: '',
-                    task_continue_register: '',
-                    task_concluded_register: '',
-                    task_doing_register: '',
-                    task_time_sum: '',
-                    task_count_pause: 0,
-                    task_register: this.state.task_register
+                /* CADASTRO DO SERVIÇO */
+                let keyService = newService.push().key
+                newService.child(keyService).set({
+                    name: this.state.task_new_service,
                 })
-                this.props.navigation.navigate('ToDo')
+                // this.props.navigation.navigate('ToDo')
                 this.setState({
-                    task_desc: '',
-                    client: '',
-                    service: ''
-
+                    task_new_service: 'alou',
                 })
             })
         } else {
-            alert('Não foi possível cadastrar a tarefa.')
+            this.setState({
+                message:'Digite o nome do novo cliente.'
+            })
         }
     }
 
@@ -148,16 +103,6 @@ class AddTask extends Component {
 
 
     render() {
-        let clientsItems = this.state.clients.map((v, k) => {
-            return <FlexPicker.Item key={k} value={v.name} label={v.name} />
-        })
-        let servicesItems = this.state.services.map((v, k) => {
-            return <FlexPicker.Item key={k} value={v.name} label={v.name} />
-        })
-        let priorityItems = this.state.prioritys.map((v, k) => {
-            return <FlexPicker.Item key={k} value={v.name} label={v.name} />
-        })
-
         return (
             <Page>
                 <Scroll>
@@ -167,43 +112,16 @@ class AddTask extends Component {
                             <Icon source={require('../uploads/arrow.png')} />
                         </TitleBar>
 
-                        <FlexLabel>Descrição</FlexLabel>
+                        <FlexLabel>Serviço</FlexLabel>
                         <FlexAddInput
-                            onChangeText={(task_desc) => this.setState({ task_desc })}
+                            onChangeText={(task_new_service) => this.setState({ task_new_service })}
                             value={this.state.task_desc}
                             returnKeyType="done"
                         />
 
-                        <FlexLabel>Cliente</FlexLabel>
-                        <FlexPicker
-                            selectedValue={this.state.client}
-                            onValueChange={(itemValue, itemIndex) => this.setState({ client: itemValue })}
-                            value={this.state.client}
-                        >
-                            {clientsItems}
+                        <Message>{this.state.message}</Message>
 
-                        </FlexPicker>
-
-                        <FlexLabel>Serviço</FlexLabel>
-                        <FlexPicker
-                            selectedValue={this.state.service}
-                            onValueChange={(itemValue, itemIndex) => this.setState({ service: itemValue })}
-                            value={this.state.service}
-                        >
-                            {servicesItems}
-
-                        </FlexPicker>
-
-                        <FlexLabel>Prioridade</FlexLabel>
-                        <FlexPicker
-                            selectedValue={this.state.priority}
-                            onValueChange={(itemValue, itemIndex) => this.setState({ priority: itemValue })}
-                            value={this.state.priority}
-                        >
-                            {priorityItems}
-                        </FlexPicker>
-
-                        <FlexBtnAdd onPress={this.insertTask} underlayColor="#457bf6">
+                        <FlexBtnAdd onPress={this.insertClient} underlayColor="#457bf6">
                             <FlexTextBtn>Adicionar</FlexTextBtn>
                         </FlexBtnAdd>
 
@@ -216,7 +134,7 @@ class AddTask extends Component {
 
 AddTask.navigationOptions = () => {
     return {
-        title: 'Novo Serviço',
+        title: 'Novo Cliente',
         headerTitleStyle: {
             color: '#ffffff'
         },
