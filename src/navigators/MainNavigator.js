@@ -2,11 +2,11 @@ import { createStackNavigator } from 'react-navigation-stack'
 
 import Login from '../screens/Login'
 import Register from '../screens/Register'
-import TaskControll from './TaskControll'
 import AddTask from '../screens/AddTask'
 import Preload from '../screens/Preload'
 import AddClient from '../screens/AddClient'
 import AddService from '../screens/AddService'
+import HomeDrawer from './HomeDrawer'
 
 const MainNavigator = createStackNavigator({
     Preload,
@@ -15,7 +15,7 @@ const MainNavigator = createStackNavigator({
     AddTask,
     AddClient,
     AddService,
-    TaskControll
+    HomeDrawer,
 }, {
     defaultNavigationOptions:{
         title:'TaskControll',

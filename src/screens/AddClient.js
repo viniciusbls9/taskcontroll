@@ -138,7 +138,10 @@ AddTask.navigationOptions = () => {
         headerTitleStyle: {
             color: '#ffffff'
         },
-        headerLeft: () => null
+        headerLeft: () => null,
+        drawerIcon:() => (
+            <Icon source={require('../uploads/more-task.png')} />
+        )
     }
 }
 

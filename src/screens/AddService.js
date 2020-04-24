@@ -134,7 +134,7 @@ class AddTask extends Component {
 
 AddTask.navigationOptions = () => {
     return {
-        title: 'Novo Cliente',
+        title: 'Novo Serviço',
         headerTitleStyle: {
             color: '#ffffff'
         },

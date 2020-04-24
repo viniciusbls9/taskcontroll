@@ -3,6 +3,7 @@ import styled from 'styled-components/native'
 import Sistema from '../Sistema'
 import firebase from '../FirebaseConnection'
 import { Alert } from 'react-native'
+import TaskEdit from '../screens/TaskEdit'
 
 const Task = styled.View`
     background-color:#fff;
@@ -111,6 +112,7 @@ export default class TaskList extends Component {
         this.pauseTask = this.pauseTask.bind(this)
         this.continueTask = this.continueTask.bind(this)
         this.concludedTask = this.concludedTask.bind(this)
+        this.editTask = this.editTask.bind(this)
         this.deleteTask = this.deleteTask.bind(this)
     }
 
@@ -289,6 +291,11 @@ export default class TaskList extends Component {
             }
         })
     }
+
+    editTask() {
+        this.props.navigation.navigate('TaskEdit')
+    }
+
     continueTask() {
         Sistema.addAuthListener(() => {
             firebase.database().ref('tasks').child(this.state.auth).child(this.props.data.key).child('task_status').set('Fazendo')
@@ -516,7 +523,7 @@ export default class TaskList extends Component {
                         <FlexBtn flex={5} underlayColor="#EBEBEB" onPress={this.doingTask}>
                             <FlexIconBtn source={require('../uploads/play.png')} />
                         </FlexBtn>
-                        <FlexBtn flex={1} underlayColor="#EBEBEB">
+                        <FlexBtn flex={1} underlayColor="#EBEBEB" onPress={this.editTask}>
                             <FlexIconBtn source={require('../uploads/pencil.png')} />
                         </FlexBtn>
                         <FlexBtn flex={1} underlayColor="#EBEBEB" onPress={this.deleteTask}>
@@ -533,7 +540,7 @@ export default class TaskList extends Component {
                         <FlexBtn flex={1} underlayColor="#EBEBEB" onPress={this.concludedTask} >
                             <FlexIconBtn source={require('../uploads/check.png')} />
                         </FlexBtn>
-                        <FlexBtn flex={1} underlayColor="#EBEBEB">
+                        <FlexBtn flex={1} underlayColor="#EBEBEB" onPress={this.editTask}>
                             <FlexIconBtn source={require('../uploads/pencil.png')} />
                         </FlexBtn>
                         <FlexBtn flex={1} underlayColor="#EBEBEB" onPress={this.deleteTask}>
@@ -550,7 +557,7 @@ export default class TaskList extends Component {
                         <FlexBtn flex={1} underlayColor="#EBEBEB" onPress={this.concludedTask}>
                             <FlexIconBtn source={require('../uploads/check.png')} />
                         </FlexBtn>
-                        <FlexBtn flex={1} underlayColor="#EBEBEB">
+                        <FlexBtn flex={1} underlayColor="#EBEBEB" onPress={this.editTask}>
                             <FlexIconBtn source={require('../uploads/pencil.png')} />
                         </FlexBtn>
                         <FlexBtn flex={1} underlayColor="#EBEBEB" onPress={this.deleteTask}>
