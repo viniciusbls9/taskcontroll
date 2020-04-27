@@ -3,7 +3,7 @@ import styled from 'styled-components/native'
 import Sistema from '../Sistema'
 import firebase from '../FirebaseConnection'
 import { Alert } from 'react-native'
-import TaskEdit from '../screens/TaskEdit'
+import ModalEdit from '../components/ModalEdit'
 
 const Task = styled.View`
     background-color:#fff;
@@ -91,7 +91,6 @@ const FlexIconBtn = styled.Image`
     height:20px;
 `
 
-
 export default class TaskList extends Component {
 
     constructor(props) {
@@ -105,7 +104,8 @@ export default class TaskList extends Component {
             task_count_pause: '',
             task_pause_register: '',
             task_doing_register: '',
-            task_concluded_register: ''
+            task_concluded_register: '',
+            modalVisible:false
         }
 
         this.doingTask = this.doingTask.bind(this)
@@ -293,7 +293,18 @@ export default class TaskList extends Component {
     }
 
     editTask() {
-        this.props.navigation.navigate('TaskEdit')
+
+        /* PEGA DATA DE REGISTRO DA TAREFA */
+        // let task_val = firebase.database().ref('tasks').child(this.state.auth).child(this.props.data.key)
+
+        // task_val.on('value', (snapshot) => {
+        //     let state = this.state
+        //     state.task_desc = snapshot.val().task_desc,
+        //     state.client = snapshot.val().client,
+        //     state.service = snapshot.val().service,
+        //     state.priority = snapshot.val().priority
+        //     this.setState(state)
+        // })
     }
 
     continueTask() {

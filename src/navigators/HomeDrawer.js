@@ -12,6 +12,8 @@ const DrawerNavigator = createDrawerNavigator({
     AddService,
     Profile
 }, {
+    drawerWidth:200,
+    edgeWidth:250,
     contentOptions: {
         activeTintColor:'#457bf6',
         inactiveTintColor:'#aaa',

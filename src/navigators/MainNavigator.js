@@ -15,7 +15,7 @@ const MainNavigator = createStackNavigator({
     AddTask,
     AddClient,
     AddService,
-    HomeDrawer,
+    HomeDrawer
 }, {
     defaultNavigationOptions:{
         title:'TaskControll',

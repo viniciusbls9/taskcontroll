@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect } from 'react'
 import styled from 'styled-components/native'
 import Sistema from '../Sistema'
 import TaskList from '../components/TaskList'
 import firebase from '../FirebaseConnection'
-// import HomeDrawer from './HomeDrawer'
+import ModalEdit from '../components/ModalEdit'
 
 
 const Page = styled.View`
@@ -55,7 +55,7 @@ class ToDo extends Component {
         this.state = {
             uid: '',
             lista: [],
-            message: 'Nenhuma tarefa cadastrada'
+            message: 'Nenhuma tarefa cadastrada',
         }
 
         this.addTask = this.addTask.bind(this)
@@ -95,7 +95,6 @@ class ToDo extends Component {
     addTask() {
         this.props.navigation.navigate('AddTask')
     }
-
     
     render() {
         return (
@@ -113,6 +112,7 @@ class ToDo extends Component {
                     data={this.state.lista}
                     renderItem={({ item }) => <TaskList data={item} />}
                 />
+                <ModalEdit editTask />
                 <Add>
                     <FlexAddButton onPress={this.addTask} underlayColor="#dec10c">
                         <FlexIcon source={require('../uploads/more-task.png')} />

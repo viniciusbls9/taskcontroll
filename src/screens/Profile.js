@@ -29,8 +29,8 @@ const Icon = styled.Image`
     height:20px;
 `
 const FlexIcon = styled.Image`
-    width:20px;
-    height:20px;
+    width:15px;
+    height:15px;
 `
 const ProfileBody = styled.View`
     align-self:center;
@@ -434,17 +434,11 @@ class Profile extends Component {
 
 Profile.navigationOptions = ({ navigation }) => {
     return {
+        title:'Perfil',
         headerTitleStyle: {
             color: '#ffffff'
         },
-        headerLeft: () => null,
-        tabBarIcon: ({ focused }) => {
-            if (focused) {
-                return <FlexIcon source={require('../uploads/user-active.png')} />
-            } else {
-                return <FlexIcon source={require('../uploads/user.png')} />
-            }
-        }
+        headerLeft: () => null
     }
 }
 
