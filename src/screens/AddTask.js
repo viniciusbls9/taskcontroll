@@ -119,8 +119,6 @@ class AddTask extends Component {
                 let auth = firebase.auth().currentUser.uid
                 let task = firebase.database().ref('tasks').child(auth)
 
-                let timestamp = Date.now()
-
                 /* INFORMAÇÕES DA DATA DE CADASTRO DA TAREFA */
                 // let date = new Date()
                 // let day = date.getDate()
@@ -153,8 +151,9 @@ class AddTask extends Component {
                     task_concluded_register: '',
                     task_doing_register: '',
                     task_time_sum: '',
+                    task_pause_sum:'',
                     task_count_pause: 0,
-                    task_register: timestamp
+                    task_register: Date.now()
                 })
                 this.props.navigation.navigate('ToDo')
                 this.setState({

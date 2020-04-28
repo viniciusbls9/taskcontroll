@@ -52,7 +52,7 @@ const ErrorText = styled.Text`
     font-size:14px;
     margin-bottom:10px;
     text-align:center;
-    color:#8a8f9e;
+    color:#ff7575;
 `
 const FlexLabel = styled.Text`
     font-size:10px;

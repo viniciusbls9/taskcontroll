@@ -51,6 +51,7 @@ const ErrorText = styled.Text`
     font-size:14px;
     margin-bottom:10px;
     text-align:center;
+    color:#ff7575;
 `
 const FlexBtnLogin = styled.TouchableHighlight`
     align-items:center;

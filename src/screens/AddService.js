@@ -60,15 +60,18 @@ class AddTask extends Component {
         this.insertClient = this.insertClient.bind(this)
         this.back = this.back.bind(this)
 
-        // let timestamp = 26964
-        // let time = new Date(timestamp)
-        // // let hours = time.getHours() + 1
-        // let minutes = time.getSeconds()
-        // let seconds = time.getSeconds()
+        let timestamp = 176441
+        let time = new Date(timestamp)
+        // let hours = time.getHours() + 1
+        let minutes = time.getMinutes()
+        let seconds = time.getSeconds()
         // let month = time.getMonth() + 1
         // let year = time.getFullYear()
         // let date = time.getDate()
-        // console.log(minutes)
+        // console.log(hours)
+        console.log(minutes)
+        console.log(seconds)
+
 
     }
 
@@ -85,15 +88,12 @@ class AddTask extends Component {
                 newService.child(keyService).set({
                     name: this.state.task_new_service,
                 })
-                // this.props.navigation.navigate('ToDo')
-                this.setState({
-                    task_new_service: 'alou',
-                })
+                this.props.navigation.navigate('ToDo')
+                alert('Serviço adicionado com sucesso')
+                this.setState({ task_new_service: '' })
             })
         } else {
-            this.setState({
-                message:'Digite o nome do novo cliente.'
-            })
+            this.setState({ message:'Digite o novo serviço.' })
         }
     }
 
@@ -115,7 +115,7 @@ class AddTask extends Component {
                         <FlexLabel>Serviço</FlexLabel>
                         <FlexAddInput
                             onChangeText={(task_new_service) => this.setState({ task_new_service })}
-                            value={this.state.task_desc}
+                            value={this.state.task_new_service}
                             returnKeyType="done"
                         />
 

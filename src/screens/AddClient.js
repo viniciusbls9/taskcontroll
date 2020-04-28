@@ -59,17 +59,6 @@ class AddTask extends Component {
         }
         this.insertClient = this.insertClient.bind(this)
         this.back = this.back.bind(this)
-
-        // let timestamp = 26964
-        // let time = new Date(timestamp)
-        // // let hours = time.getHours() + 1
-        // let minutes = time.getSeconds()
-        // let seconds = time.getSeconds()
-        // let month = time.getMonth() + 1
-        // let year = time.getFullYear()
-        // let date = time.getDate()
-        // console.log(minutes)
-
     }
 
     insertClient() {
@@ -85,10 +74,9 @@ class AddTask extends Component {
                 newClient.child(keyClient).set({
                     name: this.state.task_new_client,
                 })
-                // this.props.navigation.navigate('ToDo')
-                this.setState({
-                    task_new_client: 'alou',
-                })
+                this.props.navigation.navigate('ToDo')
+                alert('Cliente adicionado com sucesso')
+                this.setState({ task_new_client:'' })
             })
         } else {
             this.setState({
@@ -100,7 +88,6 @@ class AddTask extends Component {
     back() {
         this.props.navigation.goBack()
     }
-
 
     render() {
         return (
@@ -115,7 +102,7 @@ class AddTask extends Component {
                         <FlexLabel>Cliente</FlexLabel>
                         <FlexAddInput
                             onChangeText={(task_new_client) => this.setState({ task_new_client })}
-                            value={this.state.task_desc}
+                            value={this.state.task_new_client}
                             returnKeyType="done"
                         />
 

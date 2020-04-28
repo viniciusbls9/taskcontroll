@@ -77,7 +77,7 @@ export default class TaskLimit extends Component {
             clients: [],
             service: 0,
             services: [],
-            modalVisible: true
+            modalVisible: false
         }
 
         /* BUSCA CLIENTES INSERIDOS PELO USUÁRIO NO BANCO */

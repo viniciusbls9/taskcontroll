@@ -96,7 +96,7 @@ class Paused extends Component {
                     <>
                         <MessageBoby>
                             <Icon source={require('../uploads/test.png')} />
-                            <Message>Nenhuma tarefa a fazer.</Message>
+                            <Message>Nenhuma tarefa pausada.</Message>
                         </MessageBoby>
                     </>
                 }

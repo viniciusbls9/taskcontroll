@@ -112,7 +112,7 @@ class ToDo extends Component {
                     data={this.state.lista}
                     renderItem={({ item }) => <TaskList data={item} />}
                 />
-                <ModalEdit editTask />
+                <ModalEdit />
                 <Add>
                     <FlexAddButton onPress={this.addTask} underlayColor="#dec10c">
                         <FlexIcon source={require('../uploads/more-task.png')} />
